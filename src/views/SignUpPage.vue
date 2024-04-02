@@ -1,7 +1,7 @@
 <template>
     <div class="signup-container">
-      <h2>회원가입</h2>
-      <form @submit.prevent="register">
+      <form @submit.prevent="register" class="signup-form">
+        <h2 style="margin-bottom: 15px;">회원가입</h2>
         <div class="form-group">
           <label for="email">이메일</label>
           <input type="email" id="email" v-model="email" required placeholder="이메일을 입력하세요.">
@@ -29,15 +29,13 @@
           </select>
         </div>
         <div class="form-group">
-          <label>성별</label>
-          <div>
-            <input type="radio" id="male" value="남성" v-model="gender">
-            <label for="male">남성</label>
-          </div>
-          <div>
-            <input type="radio" id="female" value="여성" v-model="gender">
-            <label for="female">여성</label>
-          </div>
+          <label for="gender">성별</label>
+          <select id="gender" v-model="gender" required>
+            <option value="">선택하세요</option>
+            <option value="남성">남성</option>
+            <option value="여성">여성</option>
+            <!-- 추가적인 옵션을 필요에 따라 추가하세요 -->
+          </select>
         </div>
         <button type="submit">가입하기</button>
       </form>
@@ -78,11 +76,19 @@
     align-items: center;
     height: 100vh;
   }
+  .signup-form {
+  width: 80%; /* 전체 가로 사이즈의 80% */
+  max-width: 300px; /* 최대 너비 설정 */
+  }
+
+  h2,label {
+  display: block;
+  font-weight: bold;
+  font-family: 'Arial', sans-serif;
+  }
   
-  h2, label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 10px;
+  select{
+    height: 30px;  
   }
   
   .form-group {
