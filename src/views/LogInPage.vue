@@ -13,7 +13,7 @@
         </div>
         <div class="form-group">
           <router-link to="/signup" class="sign-up">회원가입</router-link>
-          <label class="find-pass" @click="goToFindPassword">비밀번호 찾기</label>
+          <router-link to="/find-password" class="find-pass">비밀번호 찾기</router-link>
         </div>
         <button type="submit">로그인</button>
       </form>
@@ -102,12 +102,15 @@ button:hover {
   color: #666; /* 연한 회색 */
 }
 
-label.find-pass{
+.find-pass{
   float: inline-end;
   display: block;
   font-family: 'Arial', sans-serif;
   margin: 10px;
   font-size: 12px; /* 작은 폰트 사이즈 */
   color: #666; /* 연한 회색 */
+}
+.find-pass:hover {
+  text-decoration: underline; /* 마우스 오버 시 밑줄 표시 */
 }
 </style>
