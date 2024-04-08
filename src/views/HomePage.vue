@@ -73,6 +73,7 @@
   }
   /* 왼쪽 메뉴의 스타일 설정 */
   .ex-layout .lnb {
+    overflow: scroll;
     float: left;
     padding: 15px;
     width: 500px;
