@@ -66,23 +66,25 @@
     height: 100vh; /* 화면 전체 높이를 사용하도록 설정 */
   }
   .ex-layout .gnb {
+    border-right: 1px solid rgb(172, 172, 172);
     float: left;
     width: 80px;
     padding: 10px;
-    background-color: skyblue;
+    background-color: white;
   }
   /* 왼쪽 메뉴의 스타일 설정 */
   .ex-layout .lnb {
+    overflow: scroll;
     float: left;
     padding: 15px;
     width: 500px;
-    background-color: orange;
+    background-color: white;
   }
   .gnb-btn {
+    border: 1px solid rgb(172, 172, 172);
     width: 100%;
     height: 40px;
     border-radius: 10px;
-    border: none; 
     background-color: white;
     margin-bottom: 20px;
   }
