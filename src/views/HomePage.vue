@@ -3,7 +3,7 @@
     <div class="ex-layout">
       <!-- 글로벌 메뉴를 나타내는 div 요소 -->
       <div class="gnb"><!-- 버튼 1 -->
-        <button class="gnb-btn">Button 1</button>
+        <button class="gnb-btn"><router-link :to="'/Users'">마이페이지</router-link></button>
         <!-- 버튼 2 -->
         <button class="gnb-btn">Button 2</button>
         <!-- 버튼 3 -->
@@ -16,8 +16,10 @@
         <button class="gnb-btn"> <router-link :to="'/login'">로그인</router-link></button>
       </div>
       <!-- 왼쪽 메뉴를 나타내는 div 요소 -->
-      <div class="lnb">Left menu</div>
-      <MapComp/>
+      <div class="lnb">
+        <input type="text" v-model="searchKeyword" placeholder="검색" @keyup.enter="searchMap">
+      </div>
+      <MapComp :keyword="searchKeyword"/>
     </div>
   </template>
   
@@ -49,7 +51,12 @@
         const windowHeight = window.innerHeight; // 창의 높이를 가져옴
         exLayout.style.height = `${windowHeight}px`; // 창의 높이를 요소의 높이로 설정
       }
-    }
+    },
+    data(){
+      return {
+        searchKeyword:'', // 검색어 저장
+      };
+    }  
   }
   </script>
   
@@ -73,11 +80,22 @@
   }
   /* 왼쪽 메뉴의 스타일 설정 */
   .ex-layout .lnb {
-    float: left;
-    padding: 15px;
-    width: 500px;
-    background-color: orange;
-  }
+  float: left;
+  padding: 15px;
+  width: 250px; /* 너비 조정 */
+  background-color: orange;
+  display: flex; /* 내부 요소를 flex로 배치 */
+  flex-direction: column; /* 자식 요소를 세로로 배치 */
+  align-items: start; /* 자식 요소를 왼쪽 정렬 */
+}
+  /* 검색창 스타일 조정 */
+  input[type="text"] {
+  width: 100%; /* 검색창 너비를 .lnb에 맞춤 */
+  padding: 8px;
+  margin-bottom: 10px; /* 검색창 아래에 여백 추가 */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
   .gnb-btn {
     width: 100%;
     height: 40px;
@@ -86,6 +104,7 @@
     background-color: white;
     margin-bottom: 20px;
   }
+
   </style>
   
   
