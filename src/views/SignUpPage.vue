@@ -59,7 +59,7 @@ export default {
       };
 
       try {
-        const response = await fetch('/join', {
+        const response = await fetch('http://localhost:8080/join', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
