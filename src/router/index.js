@@ -1,16 +1,50 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
+import MainPage from '../components/MainPage'
+import FavoritesPage from '../components/FavoritesPage'
+import RankingPage from '../components/RankingPage'
+import MyPage from '../components/MyPage'
 import LogInPage from '../views/LogInPage.vue'
 import SignUpPage from '../views/SignUpPage.vue'
 import FindPasswordPage from '@/views/FindPasswordPage.vue'
+
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'Home',
-      component: HomePage
-    },
+      component: HomePage,
+      children: [
+        {
+          path: '', // 부모 컴포넌트의 기본 경로
+          name: 'Main',
+          components: {
+            leftMenu: MainPage // MainPage를 leftMenu 영역에 렌더링
+          }
+        },
+        {
+          path: 'ranking',
+          name: 'Ranking',
+          components: {
+            leftMenu: RankingPage // RankingPage를 leftMenu 영역에 렌더링
+          }
+        },
+        {
+          path: 'favorites',
+          name: 'Favorites',
+          components: {
+            leftMenu: FavoritesPage // FavoritesPage를 leftMenu 영역에 렌더링
+          }
+        },
+        {
+          path: 'mypage',
+          name: 'MyPage',
+          components: {
+            leftMenu: MyPage // MyPage를 leftMenu 영역에 렌더링
+          }
+        }
+      ] },
     {
       path: '/login',
       name: 'LogIn',
@@ -31,3 +65,4 @@ const router = createRouter({
 })
 
 export default router
+

@@ -2,21 +2,15 @@
     <!-- 전체 페이지 레이아웃을 나타내는 div 요소 -->
     <div class="ex-layout">
       <!-- 글로벌 메뉴를 나타내는 div 요소 -->
-      <div class="gnb"><!-- 버튼 1 -->
-        <button class="gnb-btn">Button 1</button>
-        <!-- 버튼 2 -->
-        <button class="gnb-btn">Button 2</button>
-        <!-- 버튼 3 -->
-        <button class="gnb-btn">Button 3</button>
-        <!-- 버튼 4 -->
-        <button class="gnb-btn">Button 4</button>
-        <!-- 버튼 5 -->
-        <button class="gnb-btn">Button 5</button>
-        <!-- 버튼 6 -->
-        <button class="gnb-btn"> <router-link :to="'/login'">로그인</router-link></button>
+      <div class="gnb">
+        <button class="gnb-btn" @click="changeComponent('Main')">메인</button>
+        <button class="gnb-btn" @click="changeComponent('Ranking')">랭킹</button>
+        <button class="gnb-btn" @click="changeComponent('Favorites')">즐겨찾기</button>
+        <button class="gnb-btn" @click="changeComponent('MyPage')">마이페이지</button>
+        <button class="gnb-btn"> <router-link :to="'/login'">마이페이지</router-link></button>
       </div>
       <!-- 왼쪽 메뉴를 나타내는 div 요소 -->
-      <div class="lnb">Left menu</div>
+      <div class="lnb"><router-view name="leftMenu"></router-view></div>
       <MapComp/>
     </div>
   </template>
@@ -48,6 +42,9 @@
         const exLayout = document.querySelector('.ex-layout'); // ex-layout 클래스를 가진 요소 선택
         const windowHeight = window.innerHeight; // 창의 높이를 가져옴
         exLayout.style.height = `${windowHeight}px`; // 창의 높이를 요소의 높이로 설정
+      },
+      changeComponent(componentName) {
+      this.$router.push({ name: componentName });
       }
     }
   }
