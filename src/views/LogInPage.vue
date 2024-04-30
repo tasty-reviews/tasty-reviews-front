@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import axios from 'axios'; // axios import
+
 export default {
   data() {
     return {
@@ -30,19 +32,39 @@ export default {
     };
   },
   methods: {
-    goToFindPassword() {
-      // 비밀번호 찾기 페이지로 이동하는 함수
-      console.log('비밀번호 찾기 페이지로 이동');
-    },
-    login() {
-      // 여기에 로그인 로직을 구현하세요.
-      // 사용자 이름과 비밀번호는 this.username 및 this.password에 저장됩니다.
-      console.log('이메일 :', this.email);
-      console.log('비밀번호 :', this.password);
+    async login() {
+      try {
+        const response = await axios.post('http://localhost:8080/login', {
+          email: this.email,
+          password: this.password
+        }, {
+          headers: {
+            'Content-Type': 'application/json' // JSON 형식으로 요청
+          },
+          withCredentials: true // CORS 문제 해결을 위해 withCredentials 설정 추가
+        });
+
+        if (response.status === 200) { // 로그인이 성공하면
+          alert('로그인 성공');
+
+        // 서버에서 받은 JWT 토큰 저장
+        let jwtToken = response.headers['authorization']; // access토큰 값
+        // 쿠키에 jwtToken 저장
+        document.cookie = `jwtToken=${jwtToken}; path=/`;
+
+          this.$router.push("/"); // 메인 페이지로 이동
+        } else {
+          alert('로그인 실패');
+          // 로그인 실패 후의 동작 추가
+        }
+      } catch (error) {
+        console.error('오류 발생:', error);
+      }
     }
   }
 };
 </script>
+
 
 <style scoped>
 .login-container {

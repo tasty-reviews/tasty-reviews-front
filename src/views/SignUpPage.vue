@@ -24,12 +24,16 @@
       </div>
       <div class="form-group">
         <label for="gender">성별</label>
-        <select id="gender" v-model="gender" required>
-          <option value="">선택하세요</option>
-          <option value="MALE">남성</option>
-          <option value="FEMALE">여성</option>
-          <!-- 추가적인 옵션을 필요에 따라 추가하세요 -->
-        </select>
+        <div>
+          <label for="male" class="radio-label">
+            <input type="radio" id="male" value="MALE" v-model="gender" required>&ensp;남성
+          </label>
+        </div>
+        <div>
+          <label for="female" class="radio-label">
+            <input type="radio" id="female" value="FEMALE" v-model="gender" required>&ensp;여성
+          </label>
+        </div>
       </div>
       <button type="submit">가입하기</button>
     </form>
@@ -68,7 +72,10 @@ export default {
         });
 
         if (response.ok) {
+          alert('회원가입이 완료되었습니다.');
           console.log('회원가입이 완료되었습니다.');
+          window.history.back();
+
           // 회원가입 성공 시 추가 작업 수행
         } else {
           console.error('회원가입에 실패했습니다.');
@@ -104,6 +111,17 @@ select {
 .form-group {
   margin-bottom: 15px;
 }
+.form-group div {
+  display: inline-block; /* 라디오 버튼을 한 줄에 표시 */
+  margin-right: 100px; /* 각 라디오 버튼 사이의 간격 설정 */
+}
+.radio-label {
+  font-weight: normal; /* 기본 폰트 굵기로 변경 */
+  color: black; /* 텍스트 색상을 검정색으로 변경 */
+  /* 추가적인 스타일을 필요에 따라 지정할 수 있습니다. */
+}
+
+
 input[type="text"],
 input[type="email"],
 input[type="password"],
