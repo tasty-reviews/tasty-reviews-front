@@ -7,7 +7,8 @@
         <button class="gnb-btn" @click="changeComponent('Ranking')">랭킹</button>
         <button class="gnb-btn" @click="changeComponent('Favorites')">즐겨찾기</button>
         <button class="gnb-btn" @click="changeComponent('MyPage')">마이페이지</button>
-        <button class="gnb-btn"> <router-link :to="'/login'">마이페이지</router-link></button>
+        <button class="gnb-btn" @click="changeComponent('LogIn')">로그인</button> 
+        <!-- 로그인 유무에 따라 마이페이지 버튼에서 동작하도록 할 예정 -->
       </div>
       <!-- 왼쪽 메뉴를 나타내는 div 요소 -->
       <div class="lnb"><router-view name="leftMenu"></router-view></div>
@@ -17,7 +18,7 @@
   
   <script>
   // MapComp 컴포넌트를 가져옴
-  import MapComp from '../components/MapComp.vue';
+  import MapComp from '../components/comp-Map/MapComp.vue';
   
   export default {
     components: {
