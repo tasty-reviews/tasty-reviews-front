@@ -23,8 +23,12 @@
 
 <script>
 import axios from 'axios'; // axios import
+import { mapState } from 'vuex';
 
 export default {
+  computed: {
+    ...mapState(['isLoggedIn']) // Vuex 스토어의 isLoggedIn 상태를 컴포넌트 내부에 매핑
+    },
   data() {
     return {
       email: '',
@@ -46,7 +50,8 @@ export default {
 
         if (response.status === 200) { // 로그인이 성공하면
           alert('로그인 성공');
-
+          // Vuex 스토어의 isLoggedIn 상태를 변경
+          this.$store.commit('setLoggedIn', true);
         // 서버에서 받은 JWT 토큰 저장
         let jwtToken = response.headers['authorization']; // access토큰 값
         // 쿠키에 jwtToken 저장
