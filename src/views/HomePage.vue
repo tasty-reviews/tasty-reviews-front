@@ -6,7 +6,7 @@
         <button class="gnb-btn" @click="changeComponent('Main')">메인</button>
         <button class="gnb-btn" @click="changeComponent('Ranking')">랭킹</button>
         <button class="gnb-btn" @click="changeComponent('Favorites')">즐겨찾기</button>
-        <button class="gnb-btn" @click="changeComponent('MyPage')">마이페이지</button>
+        <button class="gnb-btn" @click="isLoggedIn ? changeComponent('MyPage') : changeComponent('LogIn')">마이페이지</button>
         <button class="gnb-btn" @click="changeComponent('LogIn')">로그인</button> 
         <!-- 로그인 유무에 따라 마이페이지 버튼에서 동작하도록 할 예정 -->
       </div>
@@ -19,8 +19,12 @@
   <script>
   // MapComp 컴포넌트를 가져옴
   import MapComp from '../components/comp-Map/MapComp.vue';
+  import { mapState } from 'vuex';
   
   export default {
+    computed: {
+    ...mapState(['isLoggedIn']) // Vuex 스토어의 isLoggedIn 상태를 컴포넌트 내부에 매핑
+    },
     components: {
       MapComp
     },
