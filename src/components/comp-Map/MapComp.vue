@@ -10,7 +10,7 @@
             map:null
         };
     },
-    
+
     mounted(){
         if (window.kakao && window.kakao.maps) {
       // 카카오 객체가 있고, 카카오 맵그릴 준비가 되어 있다면 맵 실행
@@ -19,6 +19,7 @@
       // 없다면 카카오 스크립트 추가 후 맵 실행
       this.loadScript();
     }
+    this.initializeMap();
     },
 
     methods: {
@@ -38,6 +39,28 @@ loadMap() {
     level: 3, // 지도의 레벨(확대, 축소 정도)
     };
     this.map = new window.kakao.maps.Map(container, options); // 지도 생성 및 객체 리턴
+    this.goToCurrentLocation();
+},
+goToCurrentLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      const newPos = new window.kakao.maps.LatLng(lat, lng);
+      this.map.setCenter(newPos);
+      this.createMarker(newPos); // 현재 위치에 마커 생성
+    }, (error) => {
+      console.error("Geolocation is not supported by this browser.", error);
+    });
+  } else {
+    alert("이 브라우저에서는 위치 서비스를 지원하지 않습니다.");
+  }
+},
+createMarker(position) {
+  new window.kakao.maps.Marker({
+    map: this.map,
+    position: position
+  });
 }
 
     }
@@ -48,6 +71,7 @@ loadMap() {
 
 <style scoped>
     .map-container {
+        position: relative;
         width: 100%;
         height: 100%;
     }

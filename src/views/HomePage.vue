@@ -6,24 +6,44 @@
         <button class="gnb-btn" @click="changeComponent('Main')">메인</button>
         <button class="gnb-btn" @click="changeComponent('Ranking')">랭킹</button>
         <button class="gnb-btn" @click="changeComponent('Favorites')">즐겨찾기</button>
-        <button class="gnb-btn" @click="changeComponent('MyPage')">마이페이지</button>
-        <button class="gnb-btn"> <router-link :to="'/login'">로그인</router-link></button>
+        <button class="gnb-btn" @click="isLoggedIn ? changeComponent('MyPage') : changeComponent('LogIn')">마이페이지</button>
+        <!-- <button class="gnb-btn" @click="changeComponent('LogIn')">로그인</button> -->
+        <!-- 로그인 유무에 따라 마이페이지 버튼에서 동작하도록 할 예정 -->
       </div>
       <!-- 왼쪽 메뉴를 나타내는 div 요소 -->
       <div class="lnb"><router-view name="leftMenu"></router-view></div>
-      <MapComp/>
+      <MapComp ref="mapComp"/>
+      <button class="current-location-btn" @click="goToCurrentLocation">현재 위치</button>
+      <button class="category-btn" @click="toggleCategories">카테고리</button>
+      <div v-if="isDropdownOpen" class="category-menu">
+        <button v-for="category in categories" :key="category" class="category-item" @click="toggleCategories">{{ category }}
+        </button>
+        </div>
+
     </div>
   </template>
   
   <script>
   // MapComp 컴포넌트를 가져옴
-  import MapComp from '../components/MapComp.vue';
+  import MapComp from '../components/comp-Map/MapComp.vue';
+  import { mapState } from 'vuex';
   
   export default {
+    computed: {
+    ...mapState(['isLoggedIn']) // Vuex 스토어의 isLoggedIn 상태를 컴포넌트 내부에 매핑
+    },
     components: {
       MapComp
     },
     name: 'HomePage',
+    
+    data(){
+      return{
+        isDropdownOpen: false,  // 드롭다운 메뉴 상태
+      categories: ['한식', '중식', '일식', '양식', '분식', '패스트푸드'],
+      //카테고리 맛집 음식종류들
+      };
+    },
     // Vue 인스턴스가 마운트되었을 때 실행되는 함수
     mounted() {
       // 페이지의 높이를 조정하는 함수 호출
@@ -45,9 +65,24 @@
       },
       changeComponent(componentName) {
       this.$router.push({ name: componentName });
-      }
+      },
+      goToCurrentLocation(){
+        if (this.$refs.mapComp){
+      this.$refs.mapComp.goToCurrentLocation(); // 'mapComp'는 MapComp 컴포넌트의 ref
+  }else {
+    console.error('MapComp is not available');
+  } 
+  },
+  toggleCategories() {
+      this.isDropdownOpen = !this.isDropdownOpen;
+      console.log("Dropdown Status: ", this.isDropdownOpen); // 상태 로깅
+    },
+  goToCategory(category) {
+    this.$router.push({ name: category }); // 라우터를 이용해 해당 카테고리 페이지로 이동
+    this.isDropdownOpen = false; // 카테고리 선택 후 드롭다운 닫기
     }
-  }
+      },
+    }
   </script>
   
   <style>
@@ -59,6 +94,7 @@
   }
   /* 전체 페이지 레이아웃의 스타일 설정 */
   .ex-layout {
+    position: relative; /* 드롭다운 메뉴를 포함하는 상위 컴포넌트에 relative 설정 */
     display: flex; /* 요소들을 수평으로 정렬하기 위해 flexbox 사용 */
     height: 100vh; /* 화면 전체 높이를 사용하도록 설정 */
   }
@@ -85,6 +121,51 @@
     background-color: white;
     margin-bottom: 20px;
   }
+  /*카테고리메뉴버튼*/
+.current-location-btn, .category-btn {
+
+  position: absolute;
+  top: 20px; /* 상단에서 일정 거리에 위치 */
+  padding: 10px 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.category-btn {
+  right: 120px; /* 화면의 왼쪽 상단에 위치 */
+}
+
+.current-location-btn {
+  right: 20px; /* 카테고리 버튼 바로 오른쪽에 위치 */
+}
+
+/* 드롭다운 메뉴 스타일 */
+.category-menu {
+  position: fixed; /* 드롭다운 메뉴를 포함하는 상위 컴포넌트에 relative 설정 */
+  top: 60px; /* 카테고리 버튼 바로 아래에 위치 */
+  right: 10%; /* 카테고리 버튼의 왼쪽 정렬을 따름 */
+  width: auto;
+  max-width: 300px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  z-index: 10000;
+}
+
+.category-item {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.category-item:hover {
+  background-color: #f7f7f7;
+}
   </style>
   
   
