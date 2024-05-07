@@ -1,7 +1,6 @@
 // store/index.js
 
-import { createStore } from 'vuex'; // Vue와 관련된 코드는 여기서 불러오지 않음
-
+import { createStore } from 'vuex'; 
 const store = createStore({
   state: {
     isLoggedIn: false // 로그인 상태 여부를 저장하는 변수
