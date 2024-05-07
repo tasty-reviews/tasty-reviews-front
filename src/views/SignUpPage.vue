@@ -4,34 +4,34 @@
       <h2 style="margin-bottom: 15px;">회원가입</h2>
       <div class="form-group">
         <label for="email">이메일</label>
-        <input type="email" id="email" v-model="email" required placeholder="이메일을 입력하세요.">
+        <input class="signup-input" type="email" id="email" v-model="email" required placeholder="이메일을 입력하세요.">
       </div>
       <div class="form-group">
         <label for="password">비밀번호</label>
-        <input type="password" id="password" v-model="password" required placeholder="비밀번호를 입력하세요."> 
+        <input class="signup-input" type="password" id="password" v-model="password" required placeholder="비밀번호를 입력하세요."> 
       </div>
       <div class="form-group">
         <label for="confirm-password">비밀번호 확인</label>
-        <input type="password" id="confirm-password" v-model="confirmPassword" required placeholder="비밀번호를 다시 입력하세요."> 
+        <input class="signup-input" type="password" id="confirm-password" v-model="confirmPassword" required placeholder="비밀번호를 다시 입력하세요."> 
       </div>
       <div class="form-group">
         <label for="nickname">닉네임</label>
-        <input type="text" id="nickname" v-model="nickname" required placeholder="닉네임을 입력하세요."> 
+        <input class="signup-input" type="text" id="nickname" v-model="nickname" required placeholder="닉네임을 입력하세요."> 
       </div>
       <div class="form-group">
         <label for="age">나이</label>
-        <input type="text" id="age" v-model="age" required placeholder="나이를 입력하세요."> 
+        <input class="signup-input" type="text" id="age" v-model="age" required placeholder="나이를 입력하세요."> 
       </div>
       <div class="form-group">
         <label for="gender">성별</label>
         <div>
           <label for="male" class="radio-label">
-            <input type="radio" id="male" value="MALE" v-model="gender" required>&ensp;남성
+            <input class="signup-input" type="radio" id="male" value="MALE" v-model="gender" required>&ensp;남성
           </label>
         </div>
         <div>
           <label for="female" class="radio-label">
-            <input type="radio" id="female" value="FEMALE" v-model="gender" required>&ensp;여성
+            <input class="signup-input" type="radio" id="female" value="FEMALE" v-model="gender" required>&ensp;여성
           </label>
         </div>
       </div>
@@ -99,6 +99,12 @@ export default {
 .signup-form {
   width: 80%; /* 전체 가로 사이즈의 80% */
   max-width: 300px; /* 최대 너비 설정 */
+}
+.signup-input{
+  outline: none; /* 마우스 클릭 시 파란 테두리 제거 */
+}
+.signup-input:focus {
+  border: 1px solid black; /* 검은 테두리 설정 */
 }
 h2,label {
   display: block;

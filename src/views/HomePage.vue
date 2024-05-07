@@ -7,7 +7,7 @@
         <button class="gnb-btn" @click="changeComponent('Ranking')">랭킹</button>
         <button class="gnb-btn" @click="changeComponent('Favorites')">즐겨찾기</button>
         <button class="gnb-btn" @click="isLoggedIn ? changeComponent('MyPage') : changeComponent('LogIn')">마이페이지</button>
-        <button class="gnb-btn" @click="changeComponent('LogIn')">로그인</button> 
+        <!-- <button class="gnb-btn" @click="changeComponent('LogIn')">로그인</button> -->
         <!-- 로그인 유무에 따라 마이페이지 버튼에서 동작하도록 할 예정 -->
       </div>
       <!-- 왼쪽 메뉴를 나타내는 div 요소 -->
