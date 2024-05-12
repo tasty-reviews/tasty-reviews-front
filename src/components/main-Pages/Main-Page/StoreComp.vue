@@ -3,7 +3,7 @@
       <div v-for="(store, index) in stores" :key="index" class="store-info">
         <div class="first-line"> 
           <!-- 가게 이름 -->
-          <h3>{{ store.name }}</h3>
+          <h3>{{ store.place_name }}</h3>
           <!-- 카테고리 -->
           <p class="category">{{ store.category }}</p>
            <!-- 별점 -->
@@ -11,7 +11,7 @@
         </div>
         <div class="second-line">
           <!-- 주소 -->
-          <p> 주소: {{ store.address }}</p>
+          <p> 주소: {{ store.address_name }}</p>
           <!-- 리뷰 갯수 -->
           <p class="fl-right">리뷰 갯수: {{ store.reviewCount }}</p>
         </div>
@@ -21,31 +21,59 @@
   </template>
   
   <script>
+  import axios from 'axios';
+  
   export default {
     data() {
       return {
-        stores: [
-          {
-            name: '가게 이름1',
-            category: '카테고리1',
-            address: '주소1',
-            rating: 4.5,
-            reviewCount: 20,
-            imageUrl: 'url1'
-          },
-          {
-            name: '가게 이름2',
-            category: '카테고리2',
-            address: '주소2',
-            rating: 3.8,
-            reviewCount: 15,
-            imageUrl: 'url2'
-          },
-          // 추가적인 가게 정보를 배열에 추가할 수 있습니다.
-        ]
+        stores: [] // 받아온 가게 정보를 저장할 배열
       };
+    },
+    mounted() {
+      // 컴포넌트가 마운트되면 가게 정보를 가져오는 메서드 호출
+      this.getStores();
+    },
+    methods: {
+      async getStores() {
+        try {
+          // 백엔드에서 가게 정보를 가져오는 HTTP 요청 보내기
+          const response = await axios.get('http://localhost:8080/search?query=고깃집'); // 검색어는 필요에 따라 변경
+          // 받은 응답을 컴포넌트의 데이터에 저장
+          this.stores = response.data.documents;
+
+          // 각 가게의 place_name을 사용하여 네이버 이미지 검색 API에 요청을 보내고 이미지 URL을 가져와 저장
+          await Promise.all(this.stores.map(async (store) => {
+            const imageUrl = await this.getNaverImage(store.place_name);
+            store.imageUrl = imageUrl;
+          }));
+          // 받은 stores 배열을 로그에 출력
+          console.log('Stores:', this.stores);
+
+        } catch (error) {
+          console.error('가게 정보를 가져오는 도중 오류 발생:', error);
+        }
+      },
+      // 클라이언트에서 네이버 API를 호출하는 함수
+      async getNaverImage(query) {
+      try {
+        const response = await axios.get('http://localhost:8080/search/image', {
+          params: {
+            query: query
+          }
+        });
+        // 성공적으로 데이터를 받아온 경우 처리
+        console.log('네이버 이미지 검색 결과:', response.data);
+        // 첫 번째 이미지의 링크만 반환
+        return response.data.link; 
+      } catch (error) {
+        // 오류 발생 시 처리
+        console.error('네이버 이미지 검색 도중 오류 발생:', error);
+        return null;
+      }
     }
-  };
+  }
+};
+
   </script>
   
   <style scoped>
