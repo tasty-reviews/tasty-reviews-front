@@ -38,16 +38,38 @@ loadMap() {
     level: 3, // 지도의 레벨(확대, 축소 정도)
     };
     this.map = new window.kakao.maps.Map(container, options); // 지도 생성 및 객체 리턴
-}
+    this.goToCurrentLocation();
+},
+goToCurrentLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      const newPos = new window.kakao.maps.LatLng(lat, lng);
+      this.map.setCenter(newPos);
+      this.createMarker(newPos); // 현재 위치에 마커 생성
+    }, (error) => {
+      console.error("Geolocation is not supported by this browser.", error);
+    });
+  } else {
+    alert("이 브라우저에서는 위치 서비스를 지원하지 않습니다.");
+  }
+},
+createMarker(position) {
+  new window.kakao.maps.Marker({
+    map: this.map,
+    position: position
+  });
 
     }
-
+    }
 };
 
 </script>
 
 <style scoped>
     .map-container {
+        position: relative;
         width: 100%;
         height: 100%;
     }
