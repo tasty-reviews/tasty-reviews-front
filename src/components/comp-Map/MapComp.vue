@@ -19,6 +19,7 @@
       // 없다면 카카오 스크립트 추가 후 맵 실행
       this.loadScript();
     }
+    this.initializeMap();
     },
 
     methods: {
@@ -60,7 +61,7 @@ createMarker(position) {
     map: this.map,
     position: position
   });
-
+  
     }
     }
 };
@@ -72,6 +73,7 @@ createMarker(position) {
         position: relative;
         width: 100%;
         height: 100%;
+        z-index: 100;
     }
 
 </style>
