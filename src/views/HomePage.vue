@@ -67,7 +67,7 @@
       this.$router.push({ name: componentName });
       },
       goToCurrentLocation(){
-        if (this.$refs.mapComp
+        if (this.$refs.mapComp){
           this.$refs.mapComp.goToCurrentLocation(); // 'mapComp'는 MapComp 컴포넌트의 ref
           console.log("Navigating to current location"); // 현재 위치로 이동하는 동작을 로그로 출력
         }else {

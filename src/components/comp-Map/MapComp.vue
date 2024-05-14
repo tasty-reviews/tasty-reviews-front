@@ -19,7 +19,6 @@
       // 없다면 카카오 스크립트 추가 후 맵 실행
       this.loadScript();
     }
-    this.initializeMap();
     },
 
     methods: {
