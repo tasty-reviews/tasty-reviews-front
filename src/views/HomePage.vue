@@ -16,7 +16,7 @@
       <button class="current-location-btn" @click="goToCurrentLocation">현재 위치</button>
       <button class="category-btn" @click="toggleCategories">카테고리</button>
       <div v-if="isDropdownOpen" class="category-menu">
-        <button v-for="category in categories" :key="category" class="category-item" @click="toggleCategories">{{ category }}
+        <button v-for="category in categories" :key="category" class="category-item" @click="goToCategory">{{ category }}
         </button>
         </div>
     </div>
@@ -34,7 +34,16 @@
     components: {
       MapComp
     },
+    
     name: 'HomePage',
+    data(){
+      return{
+        isDropdownOpen: false,  // 드롭다운 메뉴 상태
+      categories: ['한식', '중식', '일식', '양식', '분식', '패스트푸드'],
+      //카테고리 맛집 음식종류들
+      };
+    },
+
     // Vue 인스턴스가 마운트되었을 때 실행되는 함수
     data(){
       return{
@@ -65,22 +74,24 @@
       this.$router.push({ name: componentName });
       },
       goToCurrentLocation(){
-        if (this.$refs.mapComp){
-      this.$refs.mapComp.goToCurrentLocation(); // 'mapComp'는 MapComp 컴포넌트의 ref
-  }else {
-    console.error('MapComp is not available');
-  } 
-  },
-  toggleCategories() {
-      this.isDropdownOpen = !this.isDropdownOpen;
-      console.log("Dropdown Status: ", this.isDropdownOpen); // 상태 로깅
-    },
-  goToCategory(category) {
-    this.$router.push({ name: category }); // 라우터를 이용해 해당 카테고리 페이지로 이동
-    this.isDropdownOpen = false; // 카테고리 선택 후 드롭다운 닫기
+        if (this.$refs.mapComp
+          this.$refs.mapComp.goToCurrentLocation(); // 'mapComp'는 MapComp 컴포넌트의 ref
+          console.log("Navigating to current location"); // 현재 위치로 이동하는 동작을 로그로 출력
+        }else {
+          console.error('MapComp is not available');
+        } 
+      },
+      toggleCategories() {
+          this.isDropdownOpen = !this.isDropdownOpen;
+          console.log("Dropdown Status: ", this.isDropdownOpen); // 상태 로깅
+        },
+      goToCategory(category) {
+        this.$router.push({ name: category }); // 라우터를 이용해 해당 카테고리 페이지로 이동
+        this.isDropdownOpen = false; // 카테고리 선택 후 드롭다운 닫기
+        }
     }
-      }
-    }
+
+  }
   </script>
   
   <style>
@@ -94,6 +105,7 @@
   .ex-layout {
 
     display: flex; /* 요소들을 수평으로 정렬하기 위해 flexbox 사용 */
+    position: relative; /* 드롭다운 메뉴를 포함하는 상위 컴포넌트에 relative 설정 */
     height: 100vh; /* 화면 전체 높이를 사용하도록 설정 */
   }
   .ex-layout .gnb {
@@ -142,7 +154,7 @@ right: 20px; /* 카테고리 버튼 바로 오른쪽에 위치 */
 
 /* 드롭다운 메뉴 스타일 */
 .category-menu {
-position: absolute; /* 드롭다운 메뉴를 포함하는 상위 컴포넌트에 relative 설정 */
+position: fixed; /* 드롭다운 메뉴를 포함하는 상위 컴포넌트에 relative 설정 */
 top: 60px; /* 카테고리 버튼 바로 아래에 위치 */
 right: 10%; /* 카테고리 버튼의 왼쪽 정렬을 따름 */
 width: auto;

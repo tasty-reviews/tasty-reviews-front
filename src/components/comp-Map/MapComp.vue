@@ -61,9 +61,9 @@ createMarker(position) {
     map: this.map,
     position: position
   });
-}
+  
     }
-
+    }
 };
 
 </script>
