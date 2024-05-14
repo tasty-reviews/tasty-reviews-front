@@ -45,13 +45,6 @@
     },
 
     // Vue 인스턴스가 마운트되었을 때 실행되는 함수
-    data(){
-      return{
-        isDropdownOpen: false,  // 드롭다운 메뉴 상태
-      categories: ['한식', '중식', '일식', '양식', '분식', '패스트푸드'],
-      //카테고리 맛집 음식종류들
-      };
-    },
     mounted() {
       // 페이지의 높이를 조정하는 함수 호출
       this.adjustHeight();
@@ -103,7 +96,6 @@
   }
   /* 전체 페이지 레이아웃의 스타일 설정 */
   .ex-layout {
-
     display: flex; /* 요소들을 수평으로 정렬하기 위해 flexbox 사용 */
     position: relative; /* 드롭다운 메뉴를 포함하는 상위 컴포넌트에 relative 설정 */
     height: 100vh; /* 화면 전체 높이를 사용하도록 설정 */
