@@ -63,6 +63,7 @@ export default {
           // 로그인 실패 후의 동작 추가
         }
       } catch (error) {
+        alert('로그인에 실패 했습니다. \n올바른 정보를 입력해 주세요.');
         console.error('오류 발생:', error);
       }
     }

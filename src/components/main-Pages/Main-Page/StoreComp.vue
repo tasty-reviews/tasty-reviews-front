@@ -37,7 +37,7 @@
       async getStores() {
         try {
           // 백엔드에서 가게 정보를 가져오는 HTTP 요청 보내기
-          const response = await axios.get('http://localhost:8080/search?q=조선칼국수'); // 검색어는 필요에 따라 변경
+          const response = await axios.get('http://localhost:8080/search?q=포차'); // 검색어는 필요에 따라 변경
           // 받은 응답을 컴포넌트의 데이터에 저장
           this.stores = response.data.documents;
 
