@@ -81,7 +81,7 @@ export default {
           alert('이미 사용중인 이메일입니다.');
           console.error('회원가입에 실패했습니다.');
           // 회원가입 실패 시 추가 작업 수행
-        }else if(response.status == 409){
+        }else if(response.status == 403){
           alert('비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
         }
       } catch (error) {
