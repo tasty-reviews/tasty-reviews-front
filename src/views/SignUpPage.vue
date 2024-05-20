@@ -75,12 +75,10 @@ export default {
           alert('회원가입이 완료되었습니다.');
           console.log('회원가입이 완료되었습니다.');
           window.history.back();
-
-          // 회원가입 성공 시 추가 작업 수행
         } else if(response.status == 409){
-          alert('이미 사용중인 이메일입니다.');
+          const errorMessage = await response.text(); // 응답 메시지 텍스트 가져오기
+          alert(errorMessage); // 에러 메시지를 알림으로 표시
           console.error('회원가입에 실패했습니다.');
-          // 회원가입 실패 시 추가 작업 수행
         }else if(response.status == 403){
           alert('비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
         }
