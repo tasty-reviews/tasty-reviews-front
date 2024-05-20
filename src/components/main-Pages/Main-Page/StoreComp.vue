@@ -22,12 +22,16 @@
   
   <script>
   import axios from 'axios';
-  
+  import { mapState} from 'vuex'; // Vuex에서 mutations를 사용하기 위해 import
+
   export default {
     data() {
       return {
         stores: [] // 받아온 가게 정보를 저장할 배열
       };
+    },
+    computed: {
+      ...mapState(['enteredSearchWord','selectedSubRegion']) // selectedSubRegion 상태를 컴포넌트의 computed 속성으로 매핑
     },
     mounted() {
       // 컴포넌트가 마운트되면 가게 정보를 가져오는 메서드 호출
@@ -36,8 +40,10 @@
     methods: {
       async getStores() {
         try {
+          // 선택된 하위 지역에 해당하는 검색어 가져오기
+          const searchQuery = this.enteredSearchWord ? this.enteredSearchWord : this.selectedSubRegion || '포차';
           // 백엔드에서 가게 정보를 가져오는 HTTP 요청 보내기
-          const response = await axios.get('http://localhost:8080/search?q=포차'); // 검색어는 필요에 따라 변경
+          const response = await axios.get(`http://localhost:8080/search?q=${searchQuery}`);
           // 받은 응답을 컴포넌트의 데이터에 저장
           this.stores = response.data.documents;
 
