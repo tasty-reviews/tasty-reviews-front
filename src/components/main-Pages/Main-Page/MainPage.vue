@@ -1,10 +1,9 @@
 <template>
     <div class="main-form">
-        <input class="serch" placeholder="&nbsp;&nbsp;지역이나 음식점을 검색하세요.">
+        <input class="serch-box" @click="changeComponent('SearchBox')" placeholder="&nbsp;&nbsp;지역이나 음식점을 검색하세요.">
     </div>
     <div class="main-form">
         <span class="location">부산 남구 대연동</span>
-        <button class="btn">지역 선택 ></button>
     </div>
     <div class="main-form">
         <span class="text">내 주위 맛집</span>
@@ -23,6 +22,12 @@ import StoreComp from './StoreComp.vue';
 export default {
         components: {
             StoreComp
+        },
+
+        methods: {
+            changeComponent(componentName) {
+                this.$router.push({ name: componentName });
+            }
         }
 
     }
@@ -34,8 +39,9 @@ export default {
         padding: 0;
         box-sizing: border-box;
     }
-    .serch{
-        width: 90%;
+    .serch-box{
+        margin-top: 10px;
+        width: 100%;
         height: 40px;
         font-size: 20px;
         display: flex;
@@ -54,10 +60,6 @@ export default {
     .text {
         font-size: 15px; /* 텍스트의 폰트 사이즈를 조정하세요 */
         font-family: Arial, sans-serif;
-    }
-    .btn{
-        font-size: 15px;
-        float: right;
     }
     .divider {
         border-top: 1px solid rgb(172, 172, 172); /* 검은 가로줄 스타일 */

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
-import MainPage from '../components/main-Pages//Main-Page/MainPage'
+import MainPage from '../components/main-Pages/Main-Page/MainPage'
+import SearchPage from '../components/main-Pages/Main-Page/search-Pages/SearchPage'
 import FavoritesPage from '../components/main-Pages/FavoritesPage'
 import RankingPage from '../components/main-Pages/RankingPage'
 import MyPage from '../components/main-Pages/MyPage'
@@ -21,6 +22,13 @@ const router = createRouter({
           name: 'Main',
           components: {
             leftMenu: MainPage // MainPage를 leftMenu 영역에 렌더링
+          }
+        },
+        {
+          path: 'searchbox', // 부모 컴포넌트의 기본 경로
+          name: 'SearchBox',
+          components: {
+            leftMenu: SearchPage // MainPage를 leftMenu 영역에 렌더링
           }
         },
         {
