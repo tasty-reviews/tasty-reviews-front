@@ -64,8 +64,10 @@
 
       if (subRegion.endsWith("전체")) {
         this.$store.dispatch('selectSubRegion', this.selectedRegion);
+        this.$store.dispatch('doSearch',null);
       } else {
         this.$store.dispatch('selectSubRegion', this.selectedRegion + subRegion);
+        this.$store.dispatch('doSearch',null);
       }
 
       this.$router.push({ name: "Main" });
