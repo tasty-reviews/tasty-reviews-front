@@ -3,7 +3,7 @@
         <input class="serch-box" @click="changeComponent('SearchBox')" placeholder="&nbsp;&nbsp;지역이나 음식점을 검색하세요.">
     </div>
     <div class="main-form">
-        <span class="location">부산 남구 대연동</span>
+        <span class="location">{{ currentLocation }}</span>
     </div>
     <div class="main-form">
         <span class="text">내 주위 맛집</span>
@@ -18,10 +18,14 @@
     
 <script>
 import StoreComp from './StoreComp.vue';
+import { mapState } from 'vuex';
 
 export default {
         components: {
             StoreComp
+        },
+        computed: {
+            ...mapState(['currentLocation'])
         },
 
         methods: {

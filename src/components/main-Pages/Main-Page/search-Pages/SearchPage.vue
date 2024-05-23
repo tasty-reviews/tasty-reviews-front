@@ -37,6 +37,7 @@ export default {
         },
         Enterthesearch(searchWord){
             this.$store.dispatch('doSearch',searchWord);
+            this.$store.dispatch('selectSubRegion',null);
             this.$router.push({ name: "Main" });
         }
     }
