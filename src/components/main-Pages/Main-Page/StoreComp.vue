@@ -3,7 +3,7 @@
       <div v-for="(store, index) in stores" :key="index" class="store-info">
         <div class="first-line"> 
           <!-- 가게 이름 -->
-          <h3>{{ store.place_name }}</h3>
+          <h3 @click="changeComponent('StoreDetail, store.id')" class="clickable">{{ store.place_name }}</h3>
           <!-- 카테고리 -->
           <p class="category">{{ store.category }}</p>
            <!-- 별점 -->
@@ -38,6 +38,10 @@
       this.getStores();
     },
     methods: {
+      changeComponent(componentName, id) {
+      this.$router.push({ name: componentName, params: { id } })
+      },
+      
       async getStores() {
         try {
           // 선택된 하위 지역에 해당하는 검색어 가져오기
