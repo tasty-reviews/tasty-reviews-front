@@ -8,6 +8,7 @@ import MyPage from '../components/main-Pages/MyPage'
 import LogInPage from '../views/LogInPage.vue'
 import SignUpPage from '../views/SignUpPage.vue'
 import FindPasswordPage from '@/views/FindPasswordPage.vue'
+import StoreDetail from '@/components/main-Pages/Main-Page/StoreDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -51,6 +52,14 @@ const router = createRouter({
           components: {
             leftMenu: MyPage // MyPage를 leftMenu 영역에 렌더링
           }
+        },
+        {
+          path: 'store-detail/:id',
+          name: 'StoreDetail',
+          component: {
+            leftMenu: StoreDetail
+          }
+          
         }
       ] },
     {
@@ -73,4 +82,3 @@ const router = createRouter({
 })
 
 export default router
-
