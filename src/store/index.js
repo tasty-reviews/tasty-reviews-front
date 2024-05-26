@@ -4,8 +4,9 @@ const store = createStore({
   state: {
     isLoggedIn: false, // 로그인 상태 여부를 저장하는 변수
     selectedSubRegion: null, // 선택된 하위 지역을 저장하는 변수
-    enteredSearchWord: null, // 검색차에서 검색한 단어
-    currentLocation: null // 현재 위치를 저장하는 변수
+    enteredSearchWord: null, // 검색창에서 검색한 단어
+    currentLocation: null, // 현재 위치를 저장하는 변수
+    stores: [] // 가게 정보를 저장하는 배열
   },
   mutations: {
     // 로그인 상태를 변경하는 뮤테이션
@@ -23,6 +24,10 @@ const store = createStore({
     // 현재 위치를 변경하는 뮤테이션
     setCurrentLocation(state, location) {
       state.currentLocation = location;
+    },
+    // 가게 정보를 변경하는 뮤테이션
+    setStores(state, stores) {
+      state.stores = stores;
     }
   },
   actions: {
@@ -45,6 +50,10 @@ const store = createStore({
     // 현재 위치를 변경하는 액션
     updateCurrentLocation({ commit }, location) {
       commit('setCurrentLocation', location);
+    },
+    // 가게 정보를 변경하는 액션
+    updateStores({ commit }, stores) {
+      commit('setStores', stores);
     }
   }
 });
