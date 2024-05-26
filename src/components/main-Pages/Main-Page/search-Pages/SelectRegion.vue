@@ -1,3 +1,4 @@
+<!-- SelectRegion.vue -->
 <template>
     <div class="region-list">
       <div class="region-container">
@@ -63,10 +64,10 @@
       this.selectedSubRegion = subRegion;
 
       if (subRegion.endsWith("전체")) {
-        this.$store.dispatch('selectSubRegion', this.selectedRegion);
+        this.$store.dispatch('selectSubRegion', this.selectedRegion+"맛집");
         this.$store.dispatch('doSearch',null);
       } else {
-        this.$store.dispatch('selectSubRegion', this.selectedRegion + subRegion);
+        this.$store.dispatch('selectSubRegion', this.selectedRegion + subRegion+"맛집");
         this.$store.dispatch('doSearch',null);
       }
 

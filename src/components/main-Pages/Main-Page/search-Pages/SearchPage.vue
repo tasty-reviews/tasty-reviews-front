@@ -3,7 +3,7 @@
         <button @click="changeComponent('Main')" class="image-button-wrapper">
             <img src="../../../../images/GoBackButton.png" alt="Search" class="image-button"/>
         </button>
-        <input class="serch-box2" placeholder="&nbsp;&nbsp;지역이나 음식점을 검색하세요." @keyup.enter="search" autofocus/>
+        <input ref="searchBox" class="serch-box2" placeholder="&nbsp;&nbsp;지역이나 음식점을 검색하세요." @keyup.enter="search" autofocus/>
     </div>
     <div class="S-main-form">
         <h2 class="S-location"> &nbsp;&nbsp;지역 선택 </h2>
@@ -18,7 +18,11 @@ import SelectRegion from './SelectRegion.vue';
 import { mapState} from 'vuex'; // Vuex에서 mutations를 사용하기 위해 import
 
 export default {
-    
+    mounted() {
+        this.$nextTick(() => {
+            this.$refs.searchBox.focus();
+        });
+    },
     computed: {
         ...mapState(['enteredSearchWord']) // selectedSubRegion 상태를 컴포넌트의 computed 속성으로 매핑
     },
@@ -33,7 +37,7 @@ export default {
         search(event) {
              // 엔터를 눌렀을 때 검색어가 입력되었는지 확인
              const searchWord = event.target.value.trim(); // 입력된 검색어
-            this.Enterthesearch(searchWord);
+            this.Enterthesearch(searchWord+"맛집");
         },
         Enterthesearch(searchWord){
             this.$store.dispatch('doSearch',searchWord);
