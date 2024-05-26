@@ -70,8 +70,7 @@ export default {
       nickname: '',
       age: '',
       gender: '',
-      verificationCode: '',
-      isVerified: false // 이메일 인증 상태를 추적하기 위한 변수
+      verificationCode: ''
     };
   },
   methods: {
@@ -128,7 +127,7 @@ export default {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ authCode: this.email }),
-          credentials: 'include' 
+          withCredentials: true // CORS 문제 해결을 위해 withCredentials 설정 추가
         });
 
         if (response.ok) {
@@ -144,19 +143,17 @@ export default {
     },
     async verifyCode() {
       try {
-        
+
         const response = await fetch('http://localhost:8080/verify', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ authCode: this.verificationCode }),
-          credentials: 'include' 
+          body: JSON.stringify({ authCode: this.verificationCode })
         });
 
         if (response.ok) {
           alert('이메일 인증이 완료되었습니다.');
-          this.isVerified = true; // 인증이 완료되면 isVerified를 true로 설정
         } else {
           const errorMessage = await response.text(); // 오류 메시지를 읽어옴
           alert('인증 번호가 일치하지 않습니다.');
