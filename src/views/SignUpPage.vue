@@ -15,6 +15,17 @@
           <input class="signup-input" type="text" id="verification-code" v-model="verificationCode" required placeholder="인증번호를 입력하세요.">
           <button class="e-button" type="button" @click="verifyCode">인증번호 확인</button>
         </div>
+        <div class="email-group">
+          <input class="signup-input" type="email" id="email" v-model="email" required placeholder="이메일을 입력하세요.">
+          <button class="e-button" type="button" @click="sendVerificationCode">인증번호 전송</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="verification-code">인증번호</label>
+        <div class="email-group">
+          <input class="signup-input" type="text" id="verification-code" v-model="verificationCode" required placeholder="인증번호를 입력하세요.">
+          <button class="e-button" type="button" @click="verifyCode">인증번호 확인</button>
+        </div>
       </div>
       <div class="form-group">
         <label for="password">비밀번호</label>
@@ -34,6 +45,7 @@
       </div>
       <div class="form-group">
         <label for="gender">성별</label>
+        <div class="radio-group">
         <div class="radio-group">
           <label for="male" class="radio-label">
             <input class="signup-input" type="radio" id="male" value="MALE" v-model="gender" required>&ensp;남성
@@ -58,8 +70,7 @@ export default {
       nickname: '',
       age: '',
       gender: '',
-      verificationCode: '',
-      isVerified: false // 이메일 인증 상태를 추적하기 위한 변수
+      verificationCode: ''
     };
   },
   methods: {
@@ -98,6 +109,8 @@ export default {
         } else if(response.status == 409){
           const errorMessage = await response.text();
           alert(errorMessage);
+          const errorMessage = await response.text();
+          alert(errorMessage);
           console.error('회원가입에 실패했습니다.');
         }else if(response.status == 403){
           alert('비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
@@ -114,7 +127,7 @@ export default {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ authCode: this.email }),
-          credentials: 'include' 
+          withCredentials: true // CORS 문제 해결을 위해 withCredentials 설정 추가
         });
 
         if (response.ok) {
@@ -130,19 +143,17 @@ export default {
     },
     async verifyCode() {
       try {
-        
+
         const response = await fetch('http://localhost:8080/verify', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ authCode: this.verificationCode }),
-          credentials: 'include' 
+          body: JSON.stringify({ authCode: this.verificationCode })
         });
 
         if (response.ok) {
           alert('이메일 인증이 완료되었습니다.');
-          this.isVerified = true; // 인증이 완료되면 isVerified를 true로 설정
         } else {
           const errorMessage = await response.text(); // 오류 메시지를 읽어옴
           alert('인증 번호가 일치하지 않습니다.');
@@ -166,19 +177,26 @@ export default {
 .signup-form {
   width: 80%;
   max-width: 300px;
+  width: 80%;
+  max-width: 300px;
 }
+.signup-input {
+  outline: none;
 .signup-input {
   outline: none;
 }
 .signup-input:focus {
   border: 1px solid black;
+  border: 1px solid black;
 }
+h2, label {
 h2, label {
   display: block;
   font-weight: bold;
   font-family: 'Arial', sans-serif;
 }
 select {
+  height: 30px;
   height: 30px;
 }
 .form-group {
@@ -211,8 +229,37 @@ select {
 }
 .radio-group label {
   margin-right: 70px;
+.email-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.email-group input {
+  flex: 1;
+}
+.email-group button {
+  width: 30%;
+  margin-left: 10px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.email-group button:hover {
+  background-color: #0056b3;
+}
+.radio-group {
+  display: flex;
+  align-items: center;
+}
+.radio-group label {
+  margin-right: 70px;
 }
 .radio-label {
+  font-weight: normal;
+  color: black;
   font-weight: normal;
   color: black;
 }

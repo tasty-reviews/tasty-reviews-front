@@ -7,6 +7,7 @@
     </div>
     <div class="main-form">
         <span class="text">근처 맛집</span>
+        <span class="text">근처 맛집</span>
     </div>
         <div class="divider"></div>
     <div class="main-form">
@@ -18,7 +19,7 @@
     
 <script>
 import { mapState } from 'vuex';
-import StoreComp from './Store-Page/StoreComp.vue';
+import StoreComp from './StoreComp.vue';
 
 export default {
         components: {
