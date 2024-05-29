@@ -26,16 +26,18 @@ import { mapState, mapActions } from 'vuex';
 import axios from 'axios';
 
 export default {
+  data() {
+    return {
+      isCurrentLocationChanged: false // currentLocation이 변경되었는지 여부를 나타내는 변수
+    };
+  },
   computed: {
     ...mapState(['currentLocation', 'enteredSearchWord', 'selectedSubRegion', 'stores' ]) // Vuex 상태를 컴포넌트의 computed 속성으로 매핑
   },
   mounted() {
     // 컴포넌트가 마운트되면 가게 정보를 가져오는 메서드 호출
     if (this.currentLocation) {
-      // 이전 위치가 없거나 이전 위치와 현재 위치가 다를 때만 가게 정보를 가져옴
-      if (!this.prevLocation || this.prevLocation !== this.currentLocation) {
-        this.getStores();
-      }
+      this.getStores();
     }
   },
   watch: {
@@ -43,20 +45,12 @@ export default {
       handler(newLocation) {
         // currentLocation이 변경될 때 isCurrentLocationChanged를 true로 설정
         this.isCurrentLocationChanged = true;
-        // 이전 위치를 현재 위치로 업데이트
-        this.prevLocation = newLocation;
         if (newLocation) {
           this.getStores();
         }
       },
       immediate: true // 컴포넌트가 마운트될 때 즉시 감시를 시작
     }
-  },
-  data() {
-    return {
-      isCurrentLocationChanged: false, // currentLocation이 변경되었는지 여부를 나타내는 변수
-      prevLocation: null // 이전 위치를 저장하는 변수
-    };
   },
   methods: {
     ...mapActions(['updateStores']), // Vuex 액션을 컴포넌트의 메서드로 매핑
