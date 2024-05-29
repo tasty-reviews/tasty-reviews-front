@@ -118,7 +118,7 @@
   .gnb-btn {
     border: 1px solid rgb(172, 172, 172);
     width: 100%;
-    height: 40px;
+    height: 50px;
     border-radius: 10px;
     background-color: white;
     margin-bottom: 20px;

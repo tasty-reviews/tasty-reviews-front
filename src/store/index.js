@@ -2,59 +2,68 @@ import { createStore } from 'vuex';
 
 const store = createStore({
   state: {
-    isLoggedIn: false, // 로그인 상태 여부를 저장하는 변수
-    selectedSubRegion: null, // 선택된 하위 지역을 저장하는 변수
-    enteredSearchWord: null, // 검색창에서 검색한 단어
-    currentLocation: null, // 현재 위치를 저장하는 변수
-    stores: [] // 가게 정보를 저장하는 배열
+    isLoggedIn: false,
+    selectedSubRegion: null,
+    enteredSearchWord: null,
+    currentLocation: null,
+    stores: [],
+    userId: null,
+    nickname: null // 닉네임 상태 추가
   },
   mutations: {
-    // 로그인 상태를 변경하는 뮤테이션
     setLoggedIn(state, value) {
       state.isLoggedIn = value;
     },
-    // 선택된 하위 지역을 변경하는 뮤테이션
     setSelectedSubRegion(state, subRegion) {
       state.selectedSubRegion = subRegion;
     },
-    // 검색한 단어를 변경하는 뮤테이션
     setSearchWord(state, searchWord) {
       state.enteredSearchWord = searchWord;
     },
-    // 현재 위치를 변경하는 뮤테이션
     setCurrentLocation(state, location) {
       state.currentLocation = location;
     },
-    // 가게 정보를 변경하는 뮤테이션
     setStores(state, stores) {
       state.stores = stores;
+    },
+    setUserId(state, id) {
+      state.userId = id;
+    },
+    setNickname(state, nickname) {
+      state.nickname = nickname; // 닉네임 설정
     }
   },
   actions: {
-    // 로그인 상태를 변경하는 액션
-    login({ commit }) {
+    login({ commit }, { id, nickname }) {
       commit('setLoggedIn', true);
+      commit('setUserId', id);
+      commit('setNickname', nickname); // 로그인 시 닉네임 설정
     },
-    // 로그아웃 상태를 변경하는 액션
     logout({ commit }) {
       commit('setLoggedIn', false);
+      commit('setUserId', null);
+      commit('setNickname', null); // 로그아웃 시 닉네임 제거
     },
-    // 선택된 하위 지역을 변경하는 액션
     selectSubRegion({ commit }, subRegion) {
       commit('setSelectedSubRegion', subRegion);
     },
-    // 입력된 검색어를 변경하는 액션
     doSearch({ commit }, searchWord) {
       commit('setSearchWord', searchWord);
     },
-    // 현재 위치를 변경하는 액션
     updateCurrentLocation({ commit }, location) {
       commit('setCurrentLocation', location);
     },
-    // 가게 정보를 변경하는 액션
     updateStores({ commit }, stores) {
       commit('setStores', stores);
+    },
+    updateNickname({ commit }, nickname) {
+      commit('setNickname', nickname); // 닉네임 업데이트 액션
     }
+  },
+  getters: {
+    isLoggedIn: state => state.isLoggedIn,
+    userId: state => state.userId,
+    nickname: state => state.nickname // 닉네임 가져오기
   }
 });
 
