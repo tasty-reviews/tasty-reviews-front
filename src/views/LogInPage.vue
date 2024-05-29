@@ -27,8 +27,8 @@ import { mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(['isLoggedIn']) // Vuex 스토어의 isLoggedIn 상태를 컴포넌트 내부에 매핑
-    },
+    ...mapState(['isLoggedIn', 'userId']) // Vuex 스토어의 isLoggedIn 상태를 컴포넌트 내부에 매핑
+  },
   data() {
     return {
       email: '',
@@ -50,12 +50,13 @@ export default {
 
         if (response.status === 200) { // 로그인이 성공하면
           alert('로그인 성공');
-          // Vuex 스토어의 login 액션을 호출하여 isLoggedIn 상태를 변경
-          this.$store.dispatch('login');
+          const { id, nickname } = response.data; // 응답에서 id와 nickname 값 추출
+          // Vuex 스토어의 login 액션을 호출하여 isLoggedIn 상태와 userId, nickname을 변경
+          this.$store.dispatch('login', { id, nickname });
           // 서버에서 받은 JWT 토큰 저장
-          let jwtToken = response.headers['authorization']; // access토큰 값
+          let access = response.headers['authorization']; // access 토큰 값
           // 쿠키에 jwtToken 저장
-          document.cookie = `jwtToken=${jwtToken}; path=/`;
+          document.cookie = `access=${access}; path=/`;
 
           this.$router.push("/"); // 메인 페이지로 이동
         } else {
@@ -70,7 +71,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 .login-container {
@@ -92,7 +92,7 @@ export default {
   margin-bottom: 15px;
 }
 
-h2,label {
+h2, label {
   display: block;
   font-weight: bold;
   font-family: 'Arial', sans-serif;
@@ -134,7 +134,7 @@ button:hover {
   color: #666; /* 연한 회색 */
 }
 
-.find-pass{
+.find-pass {
   float: inline-end;
   display: block;
   font-family: 'Arial', sans-serif;
