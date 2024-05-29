@@ -1,6 +1,7 @@
 <template>
+  <div>
   <!-- 가게 정보를 표시하는 각각의 요소 -->
-  <div v-for="(store, index) in stores" :key="index" class="store-info">
+  <div v-for="(store, index) in stores" :key="index" class="store-info" @click="goToDetail(store.id)">
     <div class="first-line">
       <!-- 가게 이름 -->
       <h3>{{ store.place_name }}</h3>
@@ -17,7 +18,7 @@
     </div>
     <!-- 사진 -->
     <img :src="store.imageUrl" @error="onImageError(store)" alt="가게 사진">
-  </div>
+  </div></div>
 </template>
 
 <script>
@@ -122,6 +123,9 @@ export default {
     // 지연 시간을 추가하는 함수
     sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
+    },
+    goToDetail(storeId) {
+      this.$router.push({ name: 'StoreDetail', params: { id: storeId } });
     }
   }
 };
