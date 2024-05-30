@@ -3,7 +3,7 @@
       <div v-for="(store, index) in stores" :key="index" class="store-info">
         <div class="first-line"> 
           <!-- 가게 이름 -->
-          <h3 @click="changeComponent('StoreDetail, store.id')" class="clickable">{{ store.place_name }}</h3>
+          <h3 @click="goToDetail(store.id)" class="clickable">{{ store.place_name }}</h3>
           <!-- 카테고리 -->
           <p class="category">{{ store.category }}</p>
            <!-- 별점 -->
@@ -37,10 +37,11 @@
       // 컴포넌트가 마운트되면 가게 정보를 가져오는 메서드 호출
       this.getStores();
     },
+    
     methods: {
-      changeComponent(componentName, id) {
-      this.$router.push({ name: componentName, params: { id } })
-      },
+    goToDetail(storeId) {
+      this.$router.push({ name: 'StoreDetail', params: { id: storeId } });
+    },
       
       async getStores() {
         try {

@@ -2,14 +2,14 @@
   <div class="store-detail">
     <div class="header">
       <button @click="goBack" class="back-button">
-        <img src="../../../../images/GoBackButton.png" alt="Go Back" class="back-icon"/>
+        <img src="../../../images/GoBackButton.png" alt="Go Back" class="back-icon"/>
       </button>
-      <h1>장소 상세</h1>
+      <h1>상세 정보</h1>
     </div>
-    <img :src="store.imageUrl" alt="가게 사진" class="store-image">
+    <img v-if="store.imageUrl" :src="store.imageUrl" alt="가게 사진" class="store-image">
     <div class="store-info">
-      <h2>{{ store.place_name }}</h2>
-      <p>{{ store.address_name }}</p>
+      <h2>{{ store.placeName }}</h2>
+      <p>{{ store.roadAddressName }}</p>
       <div class="rating">
         <span class="category">{{ store.category }}</span>
         <span>⭐️ {{ store.rating }}점 리뷰 {{ store.reviewCount }}</span>
@@ -35,27 +35,47 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import axios from 'axios';
 
 export default {
   data() {
     return {
-      selectedTab: 'reviews' // 기본 탭 설정
+      selectedTab: 'reviews', // 기본 탭 설정
+      store: {
+        placeName: '',
+        roadAddressName: '',
+        category: '',
+        rating: '',
+        reviewCount: '',
+        reviews: [],
+        imageUrl: ''
+      }
     };
   },
   computed: {
-    ...mapState(['stores']),
-    store() {
-      const storeId = this.$route.params.id;
-      return this.stores.find(store => store.id === storeId) || {};
+    storeId() {
+      return this.$route.params.id;
+    }
+  },
+  watch: {
+    storeId: {
+      handler() {
+        this.fetchStoreDetails();
+      },
+      immediate: true
     }
   },
   methods: {
     goBack() {
       this.$router.go(-1);
     },
-    share() {
-      // 공유 기능 구현
+    async fetchStoreDetails() {
+      try {
+        const response = await axios.get(`http://localhost:8080/place/${this.storeId}`);
+        this.store = response.data;
+      } catch (error) {
+        console.error('Error fetching store details:', error);
+      }
     }
   }
 };
@@ -73,19 +93,19 @@ export default {
   margin-bottom: 16px;
 }
 
-.back-button{
+.back-button {
   margin-right: 10px;
-        width: 20px;    
-        height: 20px;
-        border: none; /* 기존의 테두리 제거 */
-        background-color: white; /* 배경색을 흰색으로 설정 */
-        cursor: pointer; /* 커서 변경 */
+  width: 20px;    
+  height: 20px;
+  border: none; /* 기존의 테두리 제거 */
+  background-color: white; /* 배경색을 흰색으로 설정 */
+  cursor: pointer; /* 커서 변경 */
 }
 
-.back-icon{
+.back-icon {
   margin-top: 10px;
-        width: 20px;    
-        height: 20px;
+  width: 20px;    
+  height: 20px;
 }
 
 .store-image {

@@ -22,7 +22,7 @@ const router = createRouter({
           path: '', // 부모 컴포넌트의 기본 경로
           name: 'Main',
           components: {
-            leftMenu: MainPage // MainPage를 leftMenu 영역에 렌더링
+            leftMenu: MainPage, // MainPage를 leftMenu 영역에 렌더링
           }
         },
         {
@@ -54,13 +54,13 @@ const router = createRouter({
           }
         },
         {
-          path: 'store-detail/:id',
+          path: 'storedetail/:id',
           name: 'StoreDetail',
-          component: {
+          components: {
             leftMenu: StoreDetail
           }
-          
         }
+        
       ] },
     {
       path: '/login',
