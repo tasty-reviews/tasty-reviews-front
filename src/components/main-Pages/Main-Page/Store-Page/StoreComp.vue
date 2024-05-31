@@ -1,24 +1,26 @@
 <template>
   <div>
-  <!-- 가게 정보를 표시하는 각각의 요소 -->
-  <div v-for="(store, index) in stores" :key="index" class="store-info" @click="goToDetail(store.id)">
-    <div class="first-line">
-      <!-- 가게 이름 -->
-      <h3>{{ store.place_name }}</h3>
-      <!-- 카테고리 -->
-      <p class="category">{{ store.category }}</p>
-      <!-- 별점 -->
-      <p class="fl-right">⭐️ {{ store.rating }}</p>
+    <!-- 가게 정보를 표시하는 각각의 요소 -->
+    <div v-for="(store, index) in stores" :key="index" class="store-info" @click="goToDetail(store.id)">
+      <div class="first-line">
+        <!-- 가게 이름 -->
+        <h3>{{ store.place_name }}</h3>
+        <!-- 카테고리 -->
+        <p class="category">{{ store.category }}</p>
+        <!-- 별점 -->
+        <p class="fl-right">⭐️ {{ store.rating }}</p>
+      </div>
+      <div class="second-line">
+        <!-- 주소 -->
+        <p> 주소: {{ store.address_name }}</p>
+        <!-- 리뷰 갯수 -->
+        <p class="fl-right">리뷰 갯수: {{ store.reviewCount }}</p>
+      </div>
+      <!-- 사진 -->
+      <img v-if="!store.imageError" :src="store.imageUrl" @error="onImageError(store)" alt="가게 사진">
+      <img v-else src="../../../../images/NoneImage.png" alt="가게 사진">
     </div>
-    <div class="second-line">
-      <!-- 주소 -->
-      <p> 주소: {{ store.address_name }}</p>
-      <!-- 리뷰 갯수 -->
-      <p class="fl-right">리뷰 갯수: {{ store.reviewCount }}</p>
-    </div>
-    <!-- 사진 -->
-    <img :src="store.imageUrl" @error="onImageError(store)" alt="가게 사진">
-  </div></div>
+  </div>
 </template>
 
 <script>
@@ -27,12 +29,10 @@ import axios from 'axios';
 
 export default {
   computed: {
-    ...mapState(['currentLocation', 'enteredSearchWord', 'selectedSubRegion', 'stores' ]) // Vuex 상태를 컴포넌트의 computed 속성으로 매핑
+    ...mapState(['currentLocation', 'enteredSearchWord', 'selectedSubRegion', 'stores' ]) 
   },
   mounted() {
-    // 컴포넌트가 마운트되면 가게 정보를 가져오는 메서드 호출
     if (this.currentLocation) {
-      // 이전 위치가 없거나 이전 위치와 현재 위치가 다를 때만 가게 정보를 가져옴
       if (!this.prevLocation || this.prevLocation !== this.currentLocation) {
         this.getStores();
       }
@@ -41,59 +41,51 @@ export default {
   watch: {
     currentLocation: {
       handler(newLocation) {
-        // currentLocation이 변경될 때 isCurrentLocationChanged를 true로 설정
         this.isCurrentLocationChanged = true;
-        // 이전 위치를 현재 위치로 업데이트
         this.prevLocation = newLocation;
         if (newLocation) {
           this.getStores();
         }
       },
-      immediate: true // 컴포넌트가 마운트될 때 즉시 감시를 시작
+      immediate: true 
     }
   },
   data() {
     return {
-      isCurrentLocationChanged: false, // currentLocation이 변경되었는지 여부를 나타내는 변수
-      prevLocation: null // 이전 위치를 저장하는 변수
+      isCurrentLocationChanged: false,
+      prevLocation: null,
+      maxRetryCount: 3 // 최대 재시도 횟수 설정
     };
   },
   methods: {
-    ...mapActions(['updateStores']), // Vuex 액션을 컴포넌트의 메서드로 매핑
+    ...mapActions(['updateStores']), 
     async getStores() {
       if (this.isCurrentLocationChanged) {
         try {
-          // 선택된 하위 지역에 해당하는 검색어 가져오기
           const searchQuery = this.enteredSearchWord || this.selectedSubRegion || this.currentLocation+"맛집";
           if (!searchQuery) {
             console.error('Search query is not valid');
             return;
           }
-          // 백엔드에서 가게 정보를 가져오는 HTTP 요청 보내기
           const response = await axios.get(`http://localhost:8080/search?q=${searchQuery}`);
-          // 받은 응답을 Vuex 스토어에 저장
           const stores = response.data.documents;
 
-          // 각 가게의 place_name을 사용하여 네이버 이미지 검색 API에 요청을 보내고 이미지 URL을 가져와 저장
           await Promise.all(stores.map(async (store, index) => {
-            // 각 요청 사이에 100ms 지연 시간 추가
             await this.sleep(100 * index);
             const imageUrls = await this.getNaverImage(store.place_name+"음식 사진");
             store.imageUrls = imageUrls;
-            store.imageUrl = imageUrls[0]; // 첫 번째 이미지를 기본으로 설정
+            store.imageUrl = imageUrls[0];
+            store.imageError = false; // 이미지 요청 실패 상태 초기화
           }));
 
-          // Vuex 스토어에 stores 배열 업데이트
           this.updateStores(stores);
 
-          // 받은 stores 배열을 로그에 출력
           console.log('Stores:', stores);
         } catch (error) {
           console.error('가게 정보를 가져오는 도중 오류 발생:', error);
         }
       }
     },
-    // 클라이언트에서 네이버 API를 호출하는 함수
     async getNaverImage(query) {
       try {
         const response = await axios.get('http://localhost:8080/search/image', {
@@ -101,9 +93,6 @@ export default {
             query: query
           }
         });
-        // 성공적으로 데이터를 받아온 경우 처리
-        console.log('네이버 이미지 검색 결과:', response.data);
-        // 이미지의 링크 배열 반환
         const imageUrls = [];
         for (let i = 1; i <= 4; i++) {
           if (response.data[`image${i}`]) {
@@ -112,21 +101,24 @@ export default {
         }
         return imageUrls;
       } catch (error) {
-        // 오류 발생 시 처리
         console.error('네이버 이미지 검색 도중 오류 발생:', error);
         return [];
       }
     },
-    // 이미지 로드 실패 시 대체 이미지 로드
     onImageError(store) {
-      const currentImageIndex = store.imageUrls.indexOf(store.imageUrl);
-      if (currentImageIndex < store.imageUrls.length - 1) {
-        store.imageUrl = store.imageUrls[currentImageIndex + 1];
-      } else {
-        store.imageUrl = 'path/to/default/image.jpg';
+      if (!store.imageError) {
+        const currentImageIndex = store.imageUrls.indexOf(store.imageUrl);
+        if (currentImageIndex < store.imageUrls.length - 1) {
+          // 다음 이미지가 있는 경우에만 다음 이미지를 로드하도록 처리
+          store.imageUrl = store.imageUrls[currentImageIndex + 1];
+        } else {
+          // 마지막 이미지일 때는 이미지 요청을 중지하고 에러 메시지를 출력
+          console.error('모든 이미지 요청이 실패했습니다.');
+          store.imageError = true; // 이미지 요청 실패 상태 플래그 설정
+          store.imageUrl = ''; // 빈 이미지 URL로 설정하거나 기타 처리 수행
+        }
       }
     },
-    // 지연 시간을 추가하는 함수
     sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     },
@@ -136,7 +128,6 @@ export default {
   }
 };
 </script>
-
 
 <style scoped>
 /* 공통 스타일 */
