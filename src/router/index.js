@@ -13,6 +13,7 @@ import LogInPage from '../views/LogInPage.vue'
 import SignUpPage from '../views/SignUpPage.vue'
 import FindPasswordPage from '@/views/FindPasswordPage.vue'
 import StoreDetail from '../components/main-Pages/Main-Page/Store-Page/StoreDetail'
+import WritingReview from '../components/main-Pages/Main-Page/Store-Page/WritingReview'
 
 const routes = [
   {
@@ -33,6 +34,14 @@ const routes = [
         components: {
           leftMenu: StoreDetail // StoreDetail를 leftMenu 영역에 렌더링
         }
+      },
+      {
+        path: 'writingreview', // 부모 컴포넌트의 기본 경로
+        name: 'WritingReview',
+        components: {
+          leftMenu: WritingReview // MainPage를 leftMenu 영역에 렌더링
+        },
+        meta: { requiresAuth: true } // 인증이 필요한 경로
       },
       {
         path: 'searchbox', // 부모 컴포넌트의 기본 경로

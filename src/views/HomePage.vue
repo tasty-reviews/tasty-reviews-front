@@ -30,11 +30,6 @@
     <div class="lnb"><router-view name="leftMenu"></router-view></div>
     <MapComp ref="mapComp"/>
     <button class="current-location-btn" @click="goToCurrentLocation">현재 위치</button>
-    <!-- <button class="category-btn" @click="toggleCategories">카테고리</button> -->
-    <div v-if="isDropdownOpen" class="category-menu">
-      <button v-for="category in categories" :key="category" class="category-item" @click="goToCategory(category)">{{ category }}
-      </button>
-    </div>
   </div>
 </template>
 
@@ -52,9 +47,6 @@ export default {
 
   name: 'HomePage',
   data(){
-    return {
-      isDropdownOpen: false,
-      categories: ['한식', '중식', '일식', '양식', '분식', '패스트푸드'],
     };
   },
 
@@ -84,16 +76,8 @@ export default {
       } else {
         console.error('MapComp is not available');
       } 
-    },
-
-    toggleCategories() {
-      this.isDropdownOpen = !this.isDropdownOpen;
-      console.log("Dropdown Status: ", this.isDropdownOpen);
-    },
-    goToCategory(category) {
-      this.$router.push({ name: category });
-      this.isDropdownOpen = false;
     }
+  }
 
   }
 }
@@ -162,16 +146,24 @@ export default {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   border-right: 1px solid rgb(172, 172, 172);
 }
-
-.current-location-btn, .category-btn {
-  position: absolute;
-  top: 20px;
-  padding: 10px 20px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  cursor: pointer;
-  z-index: 1000;
+.gnb-btn {
+  border: 1px solid rgb(172, 172, 172);
+  width: 100%;
+  height: 40px;
+  border-radius: 10px;
+  background-color: white;
+  margin-bottom: 20px;
+}
+ /*카테고리메뉴버튼*/
+.current-location-btn {
+position: absolute;
+top: 20px; /* 상단에서 일정 거리에 위치 */
+padding: 10px 20px;
+background-color: #fff;
+border: 1px solid #ccc;
+border-radius: 5px;
+cursor: pointer;
+z-index: 1000;
 }
 
 .category-btn {
@@ -180,33 +172,5 @@ export default {
 
 .current-location-btn {
   right: 20px;
-}
-
-.category-menu {
-  position: fixed;
-  top: 60px;
-  right: 10%;
-  width: auto;
-  max-width: 300px;
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 10px 20px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  z-index: 10000;
-}
-
-.category-item {
-  padding: 10px;
-  margin-bottom: 5px;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.category-item:hover {
-  background-color: #e9ecef;
 }
 </style>
