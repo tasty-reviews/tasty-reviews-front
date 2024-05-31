@@ -63,6 +63,7 @@ const routes = [
         components: {
           leftMenu: MyMaps // MyMaps를 leftMenu 영역에 렌더링
         },
+        meta: { requiresAuth: true } // 인증이 필요한 경로
       },
 
       {
@@ -71,6 +72,7 @@ const routes = [
         components: {
           leftMenu: AddMyMaps // MyMaps를 leftMenu 영역에 렌더링
         },
+        meta: { requiresAuth: true } // 인증이 필요한 경로
       },
       {
         path: 'mypage',
