@@ -5,7 +5,7 @@
     <div class="gnb">
       <button class="gnb-btn" @click="changeComponent('Main')">메인</button>
       <button class="gnb-btn" @click="changeComponent('Ranking')">랭킹</button>
-      <button class="gnb-btn" @click="changeComponent('Favorites')">즐겨찾기</button>
+      <button class="gnb-btn" @click="changeComponent('MyMaps')">내지도</button>
       <button class="gnb-btn" @click="isLoggedIn ? changeComponent('MyPage') : changeComponent('LogIn')">마이페이지</button>
       <!-- <button class="gnb-btn" @click="changeComponent('LogIn')">로그인</button> -->
       <!-- 로그인 유무에 따라 마이페이지 버튼에서 동작하도록 할 예정 -->
@@ -14,7 +14,7 @@
     <div class="lnb"><router-view name="leftMenu"></router-view></div>
     <MapComp ref="mapComp"/>
     <button class="current-location-btn" @click="goToCurrentLocation">현재 위치</button>
-    <button class="category-btn" @click="toggleCategories">카테고리</button>
+    <!-- <button class="category-btn" @click="toggleCategories">카테고리</button> -->
     <div v-if="isDropdownOpen" class="category-menu">
       <button v-for="category in categories" :key="category" class="category-item" @click="goToCategory">{{ category }}
       </button>
@@ -33,15 +33,6 @@ export default {
   },
   components: {
     MapComp
-  },
-  
-  name: 'HomePage',
-  data(){
-    return{
-      isDropdownOpen: false,  // 드롭다운 메뉴 상태
-    categories: ['한식', '중식', '일식', '양식', '분식', '패스트푸드'],
-    //카테고리 맛집 음식종류들
-    };
   },
 
   // Vue 인스턴스가 마운트되었을 때 실행되는 함수
@@ -74,14 +65,6 @@ export default {
         console.error('MapComp is not available');
       } 
     },
-    toggleCategories() {
-        this.isDropdownOpen = !this.isDropdownOpen;
-        console.log("Dropdown Status: ", this.isDropdownOpen); // 상태 로깅
-      },
-    goToCategory(category) {
-      this.$router.push({ name: category }); // 라우터를 이용해 해당 카테고리 페이지로 이동
-      this.isDropdownOpen = false; // 카테고리 선택 후 드롭다운 닫기
-      }
   }
 
 }

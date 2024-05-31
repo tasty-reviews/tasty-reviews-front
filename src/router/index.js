@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
 import MainPage from '../components/main-Pages/Main-Page/MainPage'
 import SearchPage from '../components/main-Pages/Main-Page/search-Pages/SearchPage'
-import FavoritesPage from '../components/main-Pages/FavoritesPage'
+import MyMaps from '../components/main-Pages/mymaps-Page/MyMaps.vue' // MyMaps 컴포넌트 import
+import AddMyMaps from '../components/main-Pages/mymaps-Page/AddMyMaps.vue' 
 import RankingPage from '../components/main-Pages/RankingPage'
 import MyPage from '../components/main-Pages/My-Page/MyPage'
 import FixingPage from '../components/main-Pages/My-Page/FixingPage'
@@ -30,14 +31,14 @@ const routes = [
         path: '/store/:id', // 부모 컴포넌트의 기본 경로
         name: 'StoreDetail',
         components: {
-          leftMenu: StoreDetail // MainPage를 leftMenu 영역에 렌더링
+          leftMenu: StoreDetail // StoreDetail를 leftMenu 영역에 렌더링
         }
       },
       {
         path: 'searchbox', // 부모 컴포넌트의 기본 경로
         name: 'SearchBox',
         components: {
-          leftMenu: SearchPage // MainPage를 leftMenu 영역에 렌더링
+          leftMenu: SearchPage // SearchPage를 leftMenu 영역에 렌더링
         }
       },
       {
@@ -48,11 +49,19 @@ const routes = [
         }
       },
       {
-        path: 'favorites',
-        name: 'Favorites',
+        path: 'mymaps', // "내 지도" 경로 추가
+        name: 'MyMaps',
         components: {
-          leftMenu: FavoritesPage // FavoritesPage를 leftMenu 영역에 렌더링
-        }
+          leftMenu: MyMaps // MyMaps를 leftMenu 영역에 렌더링
+        },
+      },
+
+      {
+        path: '/mymaps/add', // "내 지도" 경로 추가
+        name: 'AddMap',
+        components: {
+          leftMenu: AddMyMaps // MyMaps를 leftMenu 영역에 렌더링
+        },
       },
       {
         path: 'mypage',
