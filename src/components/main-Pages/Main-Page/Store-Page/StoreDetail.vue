@@ -12,18 +12,22 @@
     <div class="tab-menu">
       <button @click="setActiveTab('details')" :class="{ active: activeTab === 'details' }">상세 정보</button>
       <button @click="setActiveTab('reviews')" :class="{ active: activeTab === 'reviews' }">
-        유저리뷰 {{ store.reviews_count ? store.reviews_count : 0 }}
+        유저리뷰 {{ store.reviewCount ? store.reviewCount : 0 }}
       </button>
     </div>
     <div class="reviews-content" v-if="activeTab === 'reviews'">
-      <button class="write-review-button" @click="goToWriting(store.placeId)">리뷰 작성하기</button>
+      <button class="write-review-button" @click="isLoggedIn ? goToWriting(store.placeId) : changeComponent('LogIn')">리뷰 작성하기</button>
       <div class="reviews" ref="reviewList">
         <div v-for="review in reviews" :key="review.id" class="review">
-          <p><strong>{{ review.user }}</strong> - {{ review.createdDate }}</p>
-          <p>{{ review.rating }}</p>
-          <p>별점: {{ review.rating }}</p>
-          <p>{{ review.comment }}</p>
-          <img v-if="review.images && review.images.length > 0" :src="getEncodedImageUrl(review.images[0].storedFileName)" alt="리뷰 이미지">
+          <div class="review-header">
+            <div class="rating-stars">
+              <span v-for="star in review.rating" :key="star" class="star filled">⭐️</span>
+              <span class="rating-number">{{ review.rating }}</span>
+            </div>
+            <div class="review-date">{{ review.createdDate }}</div>
+          </div>
+          <p class="review-comment">{{ review.comment }}</p>
+          <img v-if="review.images && review.images.length > 0" :src="getEncodedImageUrl(review.images[0].storedFileName)" alt="리뷰 이미지" class="review-image">
         </div>
       </div>
     </div>
@@ -33,11 +37,11 @@
         <div class="margin_bottom"><label>{{ secondCategory }}</label></div>
         <div class="name-rating">
           <h3>{{ store.placeName }}</h3>
-          <label class="rating">⭐️ {{ store.rating }}</label>
+          <label class="rating">⭐️ {{ store.avgRating }}</label>
         </div>
         <div class="category-reviews">
           <label>{{ store.roadAddressname }}</label>
-          <label>리뷰 갯수: {{ store.reviews_count ? store.reviews_count : 0 }} 개</label>
+          <label>리뷰: {{ store.reviewCount ? store.reviewCount : 0 }} 개</label>
         </div>
         <div><label>전화번호: {{ store.phone }}</label></div>
         <div><label><a :href="store.placeUrl" class="kakao-map-link" target="_blank">카카오맵에서 확인하기</a></label></div>
@@ -48,6 +52,7 @@
 
 <script>
 import axios from 'axios';
+import { mapState } from 'vuex';
 
 export default {
   data() {
@@ -62,6 +67,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['isLoggedIn']),// Vuex 스토어의 isLoggedIn 상태를 컴포넌트 내부에 매핑
     secondCategory() {
       if (this.store.categoryName) {
         const categories = this.store.categoryName.split(' > ');
@@ -146,7 +152,7 @@ export default {
     },
     // 이미지 URL 인코딩
     getEncodedImageUrl(fileName) {
-      return `http://localhost:8080/api/image/${encodeURIComponent(fileName)}`;
+      return `http://localhost:8080/api/reviews/image/${encodeURIComponent(fileName)}`;
     }
   }
 };
@@ -281,18 +287,85 @@ export default {
   margin-top: 10px;
 }
 
-.reviews-content{
-  padding: 10px;
+.reviews-content {
+  padding-top: 10px;
 }
 
 .reviews {
-  max-height: 200px;
-  overflow-y: auto;
+  max-height: 69vh; /* 최대 높이를 창의 높이의 80%로 설정 */
+  overflow-y: auto; /* 스크롤이 필요한 경우만 스크롤 표시 */
+  padding: 5px; /* 추가된 패딩 */
+  box-sizing: border-box; /* 패딩 포함 박스 크기 계산 */
 }
 
+
+.reviews::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge에서 스크롤바 숨김 */
+}
+
+.reviews::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* 리뷰 항목 스타일 */
 .review {
-  border-bottom: 1px solid #ddd;
-  padding: 5px 0;
+  padding: 10px; /* 패딩 추가 */
+  margin-top: 15px;
+  margin-bottom: 15px; /* 각 리뷰 사이에 여백 추가 */
+  border-radius: 8px;
+  border: none;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1), 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 리뷰 항목 헤더 스타일 */
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* 별점과 별점 숫자 스타일 */
+.rating-stars {
+  display: flex;
+  align-items: center;
+}
+
+.star {
+  color: #ccc; /* 기본 별 색상 */
+  font-size: 20px;
+}
+
+.star.filled {
+  color: gold; /* 채워진 별 색상 */
+}
+
+.rating-number {
+  margin-left: 5px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* 리뷰 날짜 스타일 */
+.review-date {
+  color: #999;
+  font-size: 12px;
+  text-align: right;
+}
+
+/* 리뷰 댓글 스타일 */
+.review-comment {
+  margin-bottom: 10px;
+}
+
+/* 리뷰 이미지 스타일 */
+.review-image {
+  width: 100%;
+  height: auto; /* 비율 유지하며 높이 자동 조절 */
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 5px;
 }
 
 .write-review-button {
@@ -305,4 +378,5 @@ export default {
   border: none;
   border-radius: 5px;
 }
+
 </style>
