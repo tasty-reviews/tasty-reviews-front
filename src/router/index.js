@@ -14,6 +14,7 @@ import SignUpPage from '../views/SignUpPage.vue'
 import FindPasswordPage from '@/views/FindPasswordPage.vue'
 import StoreDetail from '../components/main-Pages/Main-Page/Store-Page/StoreDetail'
 import WritingReview from '../components/main-Pages/Main-Page/Store-Page/WritingReview'
+import RankingPage from '@/components/main-Pages/RankingPage.vue'
 
 const routes = [
   {
