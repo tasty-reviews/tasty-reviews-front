@@ -8,19 +8,9 @@ import MyPage from '../components/main-Pages/My-Page/MyPage'
 import FixingPage from '../components/main-Pages/My-Page/FixingPage'
 import NicknameChangePage from '../components/main-Pages/My-Page/NicknameChangePage'; 
 import PasswordChangePage from '../components/main-Pages/My-Page/PasswordChangePage'; 
-import MyPage from '../components/main-Pages/My-Page/MyPage'
-import FixingPage from '../components/main-Pages/My-Page/FixingPage'
-import NicknameChangePage from '../components/main-Pages/My-Page/NicknameChangePage'; 
-import PasswordChangePage from '../components/main-Pages/My-Page/PasswordChangePage'; 
-import MyPage from '../components/main-Pages/My-Page/MyPage'
-import FixingPage from '../components/main-Pages/My-Page/FixingPage'
-import NicknameChangePage from '../components/main-Pages/My-Page/NicknameChangePage'; 
-import PasswordChangePage from '../components/main-Pages/My-Page/PasswordChangePage'; 
 import LogInPage from '../views/LogInPage.vue'
 import SignUpPage from '../views/SignUpPage.vue'
 import FindPasswordPage from '@/views/FindPasswordPage.vue'
-import StoreDetail from '../components/main-Pages/Main-Page/Store-Page/StoreDetail'
-import StoreDetail from '../components/main-Pages/Main-Page/Store-Page/StoreDetail'
 import StoreDetail from '../components/main-Pages/Main-Page/Store-Page/StoreDetail'
 
 const router = createRouter({

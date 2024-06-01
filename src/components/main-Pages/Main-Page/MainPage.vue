@@ -7,7 +7,6 @@
     </div>
     <div class="main-form">
         <span class="text">근처 맛집</span>
-        <span class="text">근처 맛집</span>
     </div>
         <div class="divider"></div>
     <div class="main-form">
