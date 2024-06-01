@@ -291,15 +291,16 @@ export default {
   padding-top: 10px;
 }
 
-/* 리뷰 컨테이너 스타일 */
 .reviews {
-  max-height: 100%;
-  overflow-y: auto;
+  max-height: 69vh; /* 최대 높이를 창의 높이의 80%로 설정 */
+  overflow-y: auto; /* 스크롤이 필요한 경우만 스크롤 표시 */
   padding: 5px; /* 추가된 패딩 */
   box-sizing: border-box; /* 패딩 포함 박스 크기 계산 */
+}
 
-  /* 스크롤바 숨기기 */
-  scrollbar-width: none; /* Firefox */
+
+.reviews::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge에서 스크롤바 숨김 */
 }
 
 .reviews::-webkit-scrollbar {
