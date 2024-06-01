@@ -195,6 +195,7 @@ export default {
   height: 100px;
   margin-bottom: 10px;
   resize: none;
+  font-size: 20px;
 }
 
 .review-input input[type="file"] {
