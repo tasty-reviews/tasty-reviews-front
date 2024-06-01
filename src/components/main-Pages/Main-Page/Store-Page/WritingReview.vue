@@ -106,6 +106,7 @@ export default {
         this.goBack(); // 리뷰 작성 후 이전 페이지로 이동
       } catch (error) {
         console.error('리뷰 제출 중 오류 발생:', error);
+        alert("리뷰 내용을 입력해주세요.");
       }
     }
   }
