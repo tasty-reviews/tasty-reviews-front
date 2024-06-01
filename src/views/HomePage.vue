@@ -79,45 +79,72 @@ export default {
 </script>
 
 <style>
-/* 모든 요소의 기본 스타일 초기화 */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-/* 전체 페이지 레이아웃의 스타일 설정 */
+
 .ex-layout {
-  display: flex; /* 요소들을 수평으로 정렬하기 위해 flexbox 사용 */
-  position: relative; /* 드롭다운 메뉴를 포함하는 상위 컴포넌트에 relative 설정 */
-  height: 100vh; /* 화면 전체 높이를 사용하도록 설정 */
+  display: flex;
+  position: relative;
+  height: 100vh;
 }
+
 .ex-layout .gnb {
   border-right: 1px solid rgb(172, 172, 172);
   float: left;
-  width: 80px;
+  width: 80px; /* 너비를 80px로 변경 */
   padding: 10px;
   background-color: white;
 }
-/* 왼쪽 메뉴의 스타일 설정 */
+
+.gnb-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  width: 100%;
+  height: 80px; /* 높이를 80px로 변경 */
+  border-radius: 10px;
+  background-color: #fff;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.gnb-btn:hover {
+  background-color: #e9ecef;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.gnb-btn span {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.gnb-btn img.icon {
+  width: 24px;
+  height: 24px;
+}
+
 .ex-layout .lnb {
-  overflow: scroll;
+  overflow-y: auto;
   float: left;
   padding: 15px;
   width: 500px;
   background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgb(172, 172, 172);
 }
-.gnb-btn {
-  border: 1px solid rgb(172, 172, 172);
-  width: 100%;
-  height: 40px;
-  border-radius: 10px;
-  background-color: white;
-  margin-bottom: 20px;
-}
-/*카테고리메뉴버튼*/
-.current-location-btn {
+
+.current-location-btn, .category-btn {
   position: absolute;
-  top: 20px; /* 상단에서 일정 거리에 위치 */
+  top: 20px;
   padding: 10px 20px;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -127,11 +154,38 @@ export default {
 }
 
 .category-btn {
-right: 120px; /* 화면의 왼쪽 상단에 위치 */
+  right: 120px;
 }
 
 .current-location-btn {
-right: 20px; /* 카테고리 버튼 바로 오른쪽에 위치 */
+  right: 20px;
+}
+
+.category-menu {
+  position: fixed;
+  top: 60px;
+  right: 10%;
+  width: auto;
+  max-width: 300px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  z-index: 10000;
+}
+
+.category-item {
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.category-item:hover {
+  background-color: #e9ecef;
 }
 </style>
-
