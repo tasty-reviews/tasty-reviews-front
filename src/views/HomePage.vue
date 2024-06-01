@@ -84,46 +84,46 @@ export default {
       }
   }
 
-  }
-  </script>
-  
-  <style>
-  /* 모든 요소의 기본 스타일 초기화 */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  /* 전체 페이지 레이아웃의 스타일 설정 */
-  .ex-layout {
-    display: flex; /* 요소들을 수평으로 정렬하기 위해 flexbox 사용 */
-    position: relative; /* 드롭다운 메뉴를 포함하는 상위 컴포넌트에 relative 설정 */
-    height: 100vh; /* 화면 전체 높이를 사용하도록 설정 */
-  }
-  .ex-layout .gnb {
-    border-right: 1px solid rgb(172, 172, 172);
-    float: left;
-    width: 80px;
-    padding: 10px;
-    background-color: white;
-  }
-  /* 왼쪽 메뉴의 스타일 설정 */
-  .ex-layout .lnb {
-    overflow: scroll;
-    float: left;
-    padding: 15px;
-    width: 500px;
-    background-color: white;
-  }
-  .gnb-btn {
-    border: 1px solid rgb(172, 172, 172);
-    width: 100%;
-    height: 50px;
-    border-radius: 10px;
-    background-color: white;
-    margin-bottom: 20px;
-  }
-   /*카테고리메뉴버튼*/
+}
+</script>
+
+<style>
+/* 모든 요소의 기본 스타일 초기화 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* 전체 페이지 레이아웃의 스타일 설정 */
+.ex-layout {
+  display: flex; /* 요소들을 수평으로 정렬하기 위해 flexbox 사용 */
+  position: relative; /* 드롭다운 메뉴를 포함하는 상위 컴포넌트에 relative 설정 */
+  height: 100vh; /* 화면 전체 높이를 사용하도록 설정 */
+}
+.ex-layout .gnb {
+  border-right: 1px solid rgb(172, 172, 172);
+  float: left;
+  width: 80px;
+  padding: 10px;
+  background-color: white;
+}
+/* 왼쪽 메뉴의 스타일 설정 */
+.ex-layout .lnb {
+  overflow: scroll;
+  float: left;
+  padding: 15px;
+  width: 500px;
+  background-color: white;
+}
+.gnb-btn {
+  border: 1px solid rgb(172, 172, 172);
+  width: 100%;
+  height: 40px;
+  border-radius: 10px;
+  background-color: white;
+  margin-bottom: 20px;
+}
+ /*카테고리메뉴버튼*/
 .current-location-btn, .category-btn {
 
 position: absolute;
