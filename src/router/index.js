@@ -35,7 +35,7 @@ const routes = [
         }
       },
       {
-        path: 'writingreview', // 부모 컴포넌트의 기본 경로
+        path: 'writingreview/:id', // 부모 컴포넌트의 기본 경로
         name: 'WritingReview',
         components: {
           leftMenu: WritingReview // MainPage를 leftMenu 영역에 렌더링
