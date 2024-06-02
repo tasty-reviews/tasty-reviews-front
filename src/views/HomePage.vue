@@ -30,12 +30,15 @@
 <script>
 // MapComp 컴포넌트를 가져옴
 import MapComp from '../components/comp-Map/MapComp.vue';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'HomePage',
   components: {
     MapComp
+  },
+  created() {
+    this.startCookieCheck();
   },
   computed: {
     ...mapState(['isLoggedIn'])
@@ -57,6 +60,13 @@ export default {
     window.removeEventListener('resize', this.adjustHeight);
   },
   methods: {
+    ...mapActions(['checkCookie']),
+    startCookieCheck() {
+      this.checkCookie(); // 처음 로드 시 쿠키를 한 번 체크
+      setInterval(() => {
+        this.checkCookie(); // 주기적으로 쿠키 체크 (1분마다)
+      }, 60000); 
+    },
     // 페이지의 높이를 조정하는 함수
     adjustHeight() {
       const exLayout = document.querySelector('.ex-layout'); // ex-layout 클래스를 가진 요소 선택

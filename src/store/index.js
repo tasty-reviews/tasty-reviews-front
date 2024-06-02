@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import Cookies from 'js-cookie';
 
 const store = createStore({
   state: {
@@ -58,6 +59,14 @@ const store = createStore({
     },
     updateNickname({ commit }, nickname) {
       commit('setNickname', nickname); // 닉네임 업데이트 액션
+    },
+    checkCookie({ commit }) {
+      const refreshToken = Cookies.get('refresh');
+      if (!refreshToken) {
+        commit('setLoggedIn', false);
+        commit('setUserId', null);
+        commit('setNickname', null);
+      }
     }
   },
   getters: {

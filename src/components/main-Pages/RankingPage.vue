@@ -15,8 +15,6 @@
           <p>주소: {{ restaurant.roadAddressName }}</p>
           <p class="fl-right">리뷰 갯수: {{ restaurant.reviewCount }}</p>
         </div>
-        <img v-if="!restaurant.imageError" :src="restaurant.imageUrl" @error="onImageError(restaurant)" alt="가게 사진">
-        <img v-else src="/src/images/NoneImage.png" alt="가게 사진">
       </div>
     </div>
   </template>
@@ -42,37 +40,9 @@
           });
           const rankings = response.data;
   
-          // 각 restaurant에 이미지 URL 추가
-          await Promise.all(rankings.map(async (restaurant, index) => {
-            await this.sleep(100 * index);
-            const imageUrls = await this.getNaverImage(restaurant.placeName + " 음식 사진");
-            restaurant.imageUrls = imageUrls;
-            restaurant.imageUrl = imageUrls[0];
-            restaurant.imageError = false; // 이미지 요청 실패 상태 초기화
-          }));
-  
           this.rankings = rankings;
         } catch (error) {
           console.error('Error fetching rankings:', error);
-        }
-      },
-      async getNaverImage(query) {
-        try {
-          const response = await axios.get('http://localhost:8080/search/image', {
-            params: {
-              query: query
-            }
-          });
-          const imageUrls = [];
-          for (let i = 1; i <= 4; i++) {
-            if (response.data[`image${i}`]) {
-              imageUrls.push(response.data[`image${i}`].link);
-            }
-          }
-          return imageUrls;
-        } catch (error) {
-          console.error('Error during Naver image search:', error);
-          return [];
         }
       },
       onImageError(restaurant) {
@@ -99,7 +69,7 @@
   
   <style scoped>
   .rankings-page {
-    padding: 20px;
+    padding: 10px;
   }
   
   .rankings-page h1 {
@@ -113,7 +83,7 @@
   
   .store-info {
     margin-bottom: 15px;
-    padding: 10px;
+    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
@@ -144,6 +114,7 @@
     font-size: 11px;
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
   }
   
   .category {

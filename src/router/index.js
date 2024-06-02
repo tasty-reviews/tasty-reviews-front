@@ -11,7 +11,6 @@ import NicknameChangePage from '../components/main-Pages/My-Page/NicknameChangeP
 import PasswordChangePage from '../components/main-Pages/My-Page/PasswordChangePage'; 
 import LogInPage from '../views/LogInPage.vue'
 import SignUpPage from '../views/SignUpPage.vue'
-import FindPasswordPage from '@/views/FindPasswordPage.vue'
 import StoreDetail from '../components/main-Pages/Main-Page/Store-Page/StoreDetail'
 import WritingReview from '../components/main-Pages/Main-Page/Store-Page/WritingReview'
 
@@ -117,11 +116,6 @@ const routes = [
     path: '/signup',
     name: 'SignUp',
     component: SignUpPage
-  },
-  {
-    path: '/find-password',
-    name: 'FindPassword',
-    component: FindPasswordPage
   }
 ];
 
