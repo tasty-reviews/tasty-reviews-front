@@ -27,96 +27,115 @@
       <textarea id="description" v-model="description" placeholder="지도에 대한 상세설명을 작성해주세요." rows="6"></textarea>
     </div>
 
-      <div class="form-group button-container">
-        <button class="create-map-button" @click="createMap">
-          지도 생성하기
-        </button>
-      </div>
-
+    <div class="form-group button-container">
+      <button class="create-map-button" @click="createMap">지도 생성하기</button>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        thumbnail: null,
-        title: "",
-        description: "",
-        newTag: "",
-        tags: [],
-      };
-    },
-    methods: {
-      onFileChange(event) {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            this.thumbnail = e.target.result;
-          };
-          reader.readAsDataURL(file);
-        }
-      },
-      createMap() {
-        // Logic to create a map can be added here
-        alert("지도 생성하기 버튼이 클릭되었습니다!");
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .add-map {
-    max-width: 500px;
-    margin: auto;
-    padding: 20px;
-    border: 0px solid #ddd;
-    border-radius: 4px;
-    position: relative;
-    box-sizing: border-box;
-    background-color: #fff;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* 가운데 정렬 */
-    margin-bottom: 10px;
-  }
-  
-  .map-title {
-    margin: 0; /* 기본 마진 제거 */
-  }
-  
-  .thumbnail {
-    margin-bottom: 15px;
-    text-align: left;
-  }
-  
-  .thumbnail-placeholder {
-    width: 150px;
-    height: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #f0f0f0;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-  
-  .thumbnail-placeholder img {
-    max-width: 100%;
-    max-height: 100%;
-  }
+  </div>
+</template>
 
-  .thumbnail-label:hover .thumbnail-placeholder {
-    background-color: #e0e0e0; /* hover 시 배경색 변경 */
-  }
+<script>
+import axios from 'axios';
 
-  .border-line {
-  border-bottom: 1px solid #ddd; 
+export default {
+  data() {
+    return {
+      thumbnail: null,
+      title: "",
+      description: "",
+    };
+  },
+  methods: {
+    onFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.thumbnail = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    async createMap() {
+      if (!this.title || !this.description || !this.thumbnail) {
+        alert("모든 필드를 채워주세요.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("name", this.title);
+      formData.append("description", this.description);
+      formData.append("userMapImage", this.$refs.thumbnailUpload.files[0]);
+
+      // 쿠키에서 JWT 토큰 가져오기
+      const access = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('access='))
+        .split('=')[1];
+
+      try {
+        const response = await axios.post('http://localhost:8080/usermaps/add', formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            'access': access // JWT 토큰을 포함
+          },
+        });
+        console.log('userMaps successfully:', response.data);
+        alert("지도 생성 완료!");
+        
+         // 지도 생성 후 이전 페이지로 이동
+         this.$router.push('/mymaps');
+      } catch (error) {
+        console.error("지도 생성 중 오류가 발생했습니다:", error);
+        alert("지도 생성 중 오류가 발생했습니다.");
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+.add-map {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  border: 0px solid #ddd;
+  border-radius: 4px;
+  position: relative;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 가운데 정렬 */
+  margin-bottom: 10px;
+}
+.map-title {
+  margin: 0; /* 기본 마진 제거 */
+}
+.thumbnail {
+  margin-bottom: 15px;
+  text-align: left;
+}
+.thumbnail-placeholder {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f0f0f0;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.thumbnail-placeholder img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.thumbnail-label:hover .thumbnail-placeholder {
+  background-color: #e0e0e0; /* hover 시 배경색 변경 */
+}
+.border-line {
+  border-bottom: 1px solid #ddd;
   margin-bottom: 40px;
 }
 .image-icon {
