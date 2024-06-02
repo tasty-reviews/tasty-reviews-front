@@ -5,12 +5,12 @@
       <span>새 지도 만들기</span>
     </div>
     <div v-if="maps.length === 0" class="no-maps">
-      <img src="@/assets/map.png" alt="지도 없음" class="no-maps-image"/>
-      <p>내 지도가 없습니다.<br>지도를 만들어보세요.</p>
+      <img src="@/assets/map.png" alt="지도 없음" class="no-maps-image" />
+      <p>내 지도가 없습니다.<br />지도를 만들어보세요.</p>
     </div>
     <div v-else>
       <div v-for="map in maps" :key="map.id" class="map-item">
-        <img :src="map.image" alt="지도 이미지" class="map-image"/>
+        <img :src="map.image" alt="지도 이미지" class="map-image" />
         <div>
           <h2>{{ map.name }}</h2>
           <p>{{ map.description }}</p>
@@ -21,30 +21,20 @@
 </template>
 
 <script>
-import axios from 'axios';
+
 
 export default {
   data() {
     return {
-      maps: []
+      maps: [],
     };
   },
-  created() {
-    this.fetchMaps();
-  },
+
   methods: {
-    async fetchMaps() {
-      try {
-        const response = await axios.get('/api/maps');
-        this.maps = response.data;
-      } catch (error) {
-        console.error('Error fetching maps:', error);
-      }
-    },
     createNewMap() {
-      this.$router.push({ name: 'AddMap' });
-    }
-  }
+      this.$router.push({ name: "AddMap" });
+    },
+  },
 };
 </script>
 

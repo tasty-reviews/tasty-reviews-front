@@ -66,7 +66,7 @@ const routes = [
       },
 
       {
-        path: '/mymaps/add', // "내 지도" 경로 추가
+        path: 'mymaps/add', // "내 지도" 경로 추가
         name: 'AddMap',
         components: {
           leftMenu: AddMyMaps // MyMaps를 leftMenu 영역에 렌더링
