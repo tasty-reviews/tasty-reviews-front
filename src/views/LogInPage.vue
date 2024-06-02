@@ -13,7 +13,6 @@
         </div>
         <div class="form-group">
           <router-link to="/signup" class="sign-up">회원가입</router-link>
-          <router-link to="/find-password" class="find-pass">비밀번호 찾기</router-link>
         </div>
         <button type="submit">로그인</button>
       </form>

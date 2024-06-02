@@ -17,25 +17,25 @@
         <button class="logout-button" @click="logout">로그아웃</button>
       </div>
     </div>
-
-    <!-- 나의 리뷰 목록 -->
-    <div class="review-list" v-if="user && user.reviews">
       <div class="divider"></div>
       <h2 class="section-title">나의 리뷰 목록</h2>
       <div class="divider"></div>
-
-      <!-- 리뷰 항목들 -->
-      <div v-for="review in user.reviews" :key="review.store.name" class="review-item">
-        <div class="review-header">
-          <div>
-            <div class="store-name">{{ review.store.name }}</div>
-            <div class="rating">별점: {{ review.rating }}</div>
+    <!-- 나의 리뷰 목록 -->
+    <div class="review-list-container">
+      <div class="review-list" v-if="reviews && reviews.length">
+        <!-- 리뷰 항목들 -->
+        <div v-for="review in reviews" :key="review.id" class="review-item">
+          <div class="review-header">
+            <div>
+              <div class="store-name">{{ review.restaurantName }}</div>
+              <div class="rating">별점: {{ review.rating }}</div>
+            </div>
+            <button class="delete-button" @click="deleteReview(review.id)">삭제</button>
           </div>
-          <button class="delete-button" @click="deleteReview(review)">삭제</button>
-        </div>
-        <div class="review-content">{{ review.content }}</div>
-        <div class="review-photo" v-if="review.photo">
-          <img :src="review.photo" alt="리뷰 사진" />
+          <div class="review-content">{{ review.comment }}</div>
+          <div class="review-photo" v-if="review.images && review.images.length">
+            <img :src="getEncodedImageUrl(review.images[0].storedFileName)" alt="리뷰 이미지" class="review-image">
+          </div>
         </div>
       </div>
     </div>
@@ -49,7 +49,8 @@ import { mapState } from 'vuex';
 export default {
   data() {
     return {
-      user: null
+      user: null,
+      reviews: [] // 리뷰 데이터를 저장할 배열
     };
   },
   computed: {
@@ -61,6 +62,7 @@ export default {
       handler(newUserId) {
         if (newUserId) {
           this.fetchUserData(newUserId);
+          this.fetchUserReviews(newUserId); // 리뷰 데이터를 가져오는 메서드 호출
         }
       }
     }
@@ -68,6 +70,7 @@ export default {
   created() {
     if (this.userId) {
       this.fetchUserData(this.userId);
+      this.fetchUserReviews(this.userId); // 리뷰 데이터를 가져오는 메서드 호출
     }
   },
   methods: {
@@ -94,6 +97,55 @@ export default {
         console.error('오류 발생:', error);
       }
     },
+    async fetchUserReviews() {
+      try {
+        const access = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('access='))
+          .split('=')[1];
+        const response = await axios.get(`http://localhost:8080/api/members/reviews`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'access': `${access}` // JWT 토큰을 포함
+          },
+          withCredentials: true // CORS 문제 해결을 위해 withCredentials 설정 추가
+        });
+
+        if (response.status === 200) {
+          this.reviews = response.data;
+        } else {
+          console.error('Failed to fetch user reviews');
+        }
+      } catch (error) {
+        console.error('오류 발생:', error);
+      }
+    },
+    deleteReview(reviewId) {
+      try {
+        const access = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('access='))
+          .split('=')[1];
+      axios.delete(`http://localhost:8080/api/reviews/${reviewId}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'access': `${access}` // JWT 토큰을 포함
+          },
+          withCredentials: true // CORS 문제 해결을 위해 withCredentials 설정 추가
+        })
+        .then(response => {
+          if (response.status === 204) {
+            // 삭제 요청이 성공하면 리뷰 목록에서 해당 리뷰를 제거합니다.
+            this.reviews = this.reviews.filter(r => r.id !== reviewId);
+            console.log('리뷰가 삭제되었습니다.');
+          } else {
+            console.error('Failed to delete review');
+          }
+        })
+      } catch (error) {
+        console.error('오류 발생:', error);
+      }
+    },
     async logout() {
       try {
         const response = await axios.post('http://localhost:8080/logout', {}, {
@@ -111,11 +163,12 @@ export default {
         console.error('오류 발생:', error);
       }
     },
-    deleteReview(review) {
-      this.user.reviews = this.user.reviews.filter(r => r !== review);
-    },
     changeComponent(componentName) {
       this.$router.push({ name: componentName });
+    },
+    // 이미지 URL 인코딩
+    getEncodedImageUrl(fileName) {
+      return `http://localhost:8080/api/reviews/image/${encodeURIComponent(fileName)}`;
     }
   }
 };
@@ -215,9 +268,21 @@ body, .mypage-container, .page-title, .nickname, .edit-button, .email, .section-
   margin-bottom: 10px; /* 섹션 제목 아래 마진 추가 */
 }
 
+/* 리뷰 목록 컨테이너 스타일 */
+.review-list-container {
+  max-height: 75vh; /* 최대 높이를 창의 높이의 80%로 설정 */
+  overflow-y: auto; /* 스크롤이 필요한 경우만 스크롤 표시 */
+  padding: 5px; /* 추가된 패딩 */
+  box-sizing: border-box; /* 패딩 포함 박스 크기 계산 */
+}
+
+.review-list-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge에서 스크롤바 숨김 */
+}
+
 /* 리뷰 아이템 스타일 */
 .review-item {
-  margin-top: 20px;
+  margin-bottom: 20px;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -255,26 +320,29 @@ body, .mypage-container, .page-title, .nickname, .edit-button, .email, .section-
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
+  align-self: flex-start; /* 삭제 버튼을 상단에 정렬 */
 }
 
 /* 리뷰 내용 스타일 */
 .review-content {
   font-size: 14px;
-  color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 10px; /* 리뷰 내용 아래 마진 추가 */
 }
 
 /* 리뷰 사진 스타일 */
+.review-photo {
+  text-align: center; /* 사진을 가운데 정렬 */
+}
+
 .review-photo img {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
 }
 
+/* 구분선 스타일 */
 .divider {
-  border-top: 1px solid rgb(172, 172, 172); /* 검은 가로줄 스타일 */
-  margin-bottom: 15px;
-  padding: 0;
-  box-sizing: border-box;
+  margin: 20px 0;
+  border-top: 1px solid #ddd;
 }
 </style>
