@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="font">
     <div @click="createNewMap" class="new-map">
       <img src="@/assets/add-icon.png" alt="새 지도 만들기 아이콘" />
       <span>새 지도 만들기</span>
@@ -49,6 +49,9 @@ export default {
 </script>
 
 <style scoped>
+.font {
+  font-family: 'Arial', sans-serif;
+}
 .new-map {
   display: flex;
   align-items: center;
