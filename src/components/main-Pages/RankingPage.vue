@@ -5,7 +5,7 @@
         <option value="VIEW_COUNT">조회수 순</option>
         <option value="REVIEW_COUNT">리뷰 순</option>
       </select>
-      <div v-for="(restaurant, index) in rankings" :key="index" class="store-info">
+      <div v-for="(restaurant, index) in rankings" :key="index" class="store-info" @click="goToDetail(restaurant.placeId)">
         <div class="first-line">
           <h3>{{ restaurant.placeName }}</h3>
           <p class="category">{{ restaurant.category }}</p>
@@ -57,6 +57,9 @@
           }
         }
       },
+      goToDetail(storeId) {
+        this.$router.push({ name: 'StoreDetail', params: { id: storeId } });
+      },
       sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
@@ -70,6 +73,7 @@
   <style scoped>
   .rankings-page {
     padding: 10px;
+    font-family: 'Arial', sans-serif;
   }
   
   .rankings-page h1 {

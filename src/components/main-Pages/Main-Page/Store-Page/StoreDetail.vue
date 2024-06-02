@@ -142,6 +142,7 @@ export default {
       this.$router.push({ name: componentName });
     },
     goToWriting(storeId) {
+      console.log(storeId);
       this.$router.push({ name: 'WritingReview', params: { id: storeId } });
     },
     setActiveTab(tab) {
