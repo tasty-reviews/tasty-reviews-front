@@ -76,6 +76,7 @@
     position: relative;
     box-sizing: border-box;
     background-color: #fff;
+    font-family: 'Arial', sans-serif;
   }
   
   .header {
