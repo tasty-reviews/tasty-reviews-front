@@ -13,6 +13,7 @@ import LogInPage from '../views/LogInPage.vue'
 import SignUpPage from '../views/SignUpPage.vue'
 import StoreDetail from '../components/main-Pages/Main-Page/Store-Page/StoreDetail'
 import WritingReview from '../components/main-Pages/Main-Page/Store-Page/WritingReview'
+import EditReview from '../components/main-Pages/My-Page/EditReview'
 
 const routes = [
   {
@@ -35,7 +36,7 @@ const routes = [
         }
       },
       {
-        path: 'writingreview', // 부모 컴포넌트의 기본 경로
+        path: 'writingreview/:id', // 부모 컴포넌트의 기본 경로
         name: 'WritingReview',
         components: {
           leftMenu: WritingReview // MainPage를 leftMenu 영역에 렌더링
@@ -81,6 +82,14 @@ const routes = [
         },
         meta: { requiresAuth: true } // 인증이 필요한 경로
       },
+      {
+        path: '/edit-review/:storeId/:reviewId', // 경로에 동적 세그먼트 추가
+        name: 'EditReview',
+        components: {
+          leftMenu: EditReview // MyPage를 leftMenu 영역에 렌더링
+        },
+        meta: { requiresAuth: true } // 인증이 필요한 경로
+      },      
       {
         path: 'fixing',
         name: 'Fixing',

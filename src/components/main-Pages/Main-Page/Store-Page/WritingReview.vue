@@ -12,7 +12,7 @@
     <div class="rating-wrapper">
       <div class="rating-container">
         <div class="rating-stars">
-          <img v-for="n in 5" :key="n" @click="setRating(n)" :src="n <= selectedRating ? './Star.png' : './HalfStar.png'" alt="별">
+          <img v-for="n in 5" :key="n" @click="setRating(n)" :src="n <= selectedRating ? '/Star.png' : '/HalfStar.png'" alt="별">
         </div>
       </div>
       <div class="rating-label">{{ selectedRating }}/5</div>

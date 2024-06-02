@@ -70,6 +70,7 @@
   <style scoped>
   .rankings-page {
     padding: 10px;
+    font-family: 'Arial', sans-serif;
   }
   
   .rankings-page h1 {
