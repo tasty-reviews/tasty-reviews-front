@@ -74,6 +74,7 @@ const routes = [
         },
         meta: { requiresAuth: true } // 인증이 필요한 경로
       },
+
       {
         path: 'mypage',
         name: 'MyPage',
