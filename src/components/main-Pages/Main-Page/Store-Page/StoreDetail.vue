@@ -121,8 +121,21 @@ export default {
       try {
         const response = await axios.get(`http://localhost:8080/api/restaurants/${this.store.id}`);
         this.reviews = response.data;
+        // 리뷰 수와 평점을 업데이트
+        this.store.reviewCount = this.reviews.length;
+        const totalRating = this.reviews.reduce((sum, review) => sum + review.rating, 0);
+        this.store.avgRating = (totalRating / this.reviews.length).toFixed(2);
       } catch (error) {
         console.error('Error fetching reviews:', error);
+      }
+    },
+    async deleteReview(reviewId) {
+      try {
+        await axios.delete(`http://localhost:8080/api/reviews/${reviewId}`);
+        this.fetchReviews(); // 리뷰 삭제 후 리뷰 목록과 평점을 업데이트
+        this.$emit('reviewDeleted'); // 리뷰 삭제 이벤트 발생
+      } catch (error) {
+        console.error('Error deleting review:', error);
       }
     },
     // 이미지 로드 실패 시 대체 이미지 로드
