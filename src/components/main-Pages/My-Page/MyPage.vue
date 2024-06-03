@@ -31,7 +31,10 @@
               <div class="store-name">{{ review.placeName }}</div>
               <div class="rating">별점: {{ review.rating }}</div>
             </div>
-            <button class="delete-button" @click="deleteReview(review.id)">삭제</button>
+            <div class="button-group">
+              <button class="edit-button" @click="editReview(review.placeId,review.id)">수정</button>
+              <button class="delete-button" @click="deleteReview(review.id)">삭제</button>
+            </div>
           </div>
           <div class="review-content">{{ review.comment }}</div>
           <div class="review-photo" v-if="review.images && review.images.length">
@@ -51,7 +54,9 @@ export default {
   data() {
     return {
       user: null,
-      reviews: [] // 리뷰 데이터를 저장할 배열
+      reviews: [], // 리뷰 데이터를 저장할 배열
+      editingReview: null, // 수정 중인 리뷰 데이터를 저장할 객체
+      editModalVisible: false, // 수정 모달의 가시성을 조절하는 변수
     };
   },
   computed: {
@@ -145,6 +150,15 @@ export default {
         }
       } catch (error) {
         console.error('오류 발생:', error);
+      }
+    },
+    async editReview(storeId, reviewId) {
+      console.log(storeId,reviewId);
+      try {
+        // storeId와 reviewId를 이용하여 리뷰 수정 페이지로 이동합니다.
+        this.$router.push({ name: 'EditReview', params: { storeId: storeId, reviewId: reviewId } });
+      } catch (error) {
+        console.error('리뷰 수정 페이지로 이동 중 오류가 발생했습니다:', error);
       }
     },
     async logout() {
@@ -326,24 +340,37 @@ body, .mypage-container, .page-title, .nickname, .edit-button, .email, .section-
 
 /* 리뷰 내용 스타일 */
 .review-content {
-  font-size: 14px;
-  margin-bottom: 10px; /* 리뷰 내용 아래 마진 추가 */
+
+font-size: 14px;
+margin-bottom: 10px; /* 리뷰 내용 아래 마진 추가 */
 }
 
 /* 리뷰 사진 스타일 */
 .review-photo {
-  text-align: center; /* 사진을 가운데 정렬 */
+text-align: center; /* 사진을 가운데 정렬 */
 }
 
 .review-photo img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
+max-width: 100%;
+height: auto;
+border-radius: 8px;
 }
 
 /* 구분선 스타일 */
 .divider {
-  margin: 20px 0;
-  border-top: 1px solid #ddd;
+margin: 20px 0;
+border-top: 1px solid #ddd;
+}
+
+/* 수정 버튼 스타일 */
+.edit-button {
+  padding: 5px 10px;
+  background-color: #80bfff; /* 수정 버튼 색상 지정 */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  align-self: flex-start; /* 수정 버튼을 상단에 정렬 */
 }
 </style>

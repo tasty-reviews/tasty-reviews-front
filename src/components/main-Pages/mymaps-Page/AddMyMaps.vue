@@ -13,7 +13,7 @@
           </span>
           <img v-else :src="thumbnail" alt="썸네일 이미지" />
         </div>
-        <input type="file" id="thumbnail-upload" @change="onFileChange" style="display: none" />
+        <input ref="thumbnailUpload" type="file" id="thumbnail-upload" @change="onFileChange" style="display: none" />
       </label>
     </div>
 
@@ -34,17 +34,14 @@
 </template>
 
 <script>
-import axios from 'axios'; // axios 인스턴스를 불러옵니다
+import axios from 'axios';
 
 export default {
   data() {
     return {
       thumbnail: null,
-      title: '',
-      description: '',
-      newTag: '',
-      tags: [],
-      thumbnailFile: null, // 추가된 부분: 선택된 파일을 저장
+      title: "",
+      description: "",
     };
   },
   methods: {
@@ -56,39 +53,47 @@ export default {
           this.thumbnail = e.target.result;
         };
         reader.readAsDataURL(file);
-        this.thumbnailFile = file; // 추가된 부분: 선택된 파일을 저장
       }
     },
     async createMap() {
-      if (this.title && this.description.length >= 20) {
-        try {
-          const formData = new FormData();
-          formData.append('name', this.title);
-          formData.append('description', this.description);
-          if (this.thumbnailFile) {
-            formData.append('userMapImage', this.thumbnailFile);
-          }
+      if (!this.title || !this.description || !this.thumbnail) {
+        alert("모든 필드를 채워주세요.");
+        return;
+      }
 
-          const response = await axios.post('/usermaps/add', formData);
-          if (response.status === 201) {
-            alert('지도 생성에 성공했습니다!');
-            // 필요한 경우 추가 작업 수행 (예: 페이지 이동)
-          }
-        } catch (error) {
-          console.error('지도 생성에 실패했습니다:', error);
-          alert('지도 생성에 실패했습니다.');
-        }
-      } else {
-        alert('지도 제목과 상세 설명을 올바르게 입력해주세요.');
+      const formData = new FormData();
+      formData.append("name", this.title);
+      formData.append("description", this.description);
+      formData.append("userMapImage", this.$refs.thumbnailUpload.files[0]);
+
+      // 쿠키에서 JWT 토큰 가져오기
+      const access = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('access='))
+        .split('=')[1];
+
+      try {
+        const response = await axios.post('http://localhost:8080/usermaps/add', formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            'access': access // JWT 토큰을 포함
+          },
+        });
+        console.log('userMaps successfully:', response.data);
+        alert("지도 생성 완료!");
+        
+         // 지도 생성 후 이전 페이지로 이동
+         this.$router.push('/mymaps');
+      } catch (error) {
+        console.error("지도 생성 중 오류가 발생했습니다:", error);
+        alert("지도 생성 중 오류가 발생했습니다.");
       }
     },
   },
 };
 </script>
 
-
 <style scoped>
-/* 스타일 설정 */
 .add-map {
   max-width: 500px;
   margin: auto;
@@ -99,23 +104,19 @@ export default {
   box-sizing: border-box;
   background-color: #fff;
 }
-
 .header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; /* 가운데 정렬 */
   margin-bottom: 10px;
 }
-
 .map-title {
-  margin: 0;
+  margin: 0; /* 기본 마진 제거 */
 }
-
 .thumbnail {
   margin-bottom: 15px;
   text-align: left;
 }
-
 .thumbnail-placeholder {
   width: 150px;
   height: 150px;
@@ -126,35 +127,28 @@ export default {
   border-radius: 4px;
   border: 1px solid #ccc;
 }
-
 .thumbnail-placeholder img {
   max-width: 100%;
   max-height: 100%;
 }
-
 .thumbnail-label:hover .thumbnail-placeholder {
-  background-color: #e0e0e0;
+  background-color: #e0e0e0; /* hover 시 배경색 변경 */
 }
-
 .border-line {
   border-bottom: 1px solid #ddd;
   margin-bottom: 40px;
 }
-
 .image-icon {
   width: 15px;
   height: auto;
 }
-
 .form-group {
   margin-bottom: 20px;
 }
-
 .form-group label {
   display: block;
   margin-bottom: 8px;
 }
-
 .form-group input,
 .form-group textarea {
   width: 100%;
@@ -163,15 +157,12 @@ export default {
   border-radius: 4px;
   box-sizing: border-box;
 }
-
 .form-group input {
   height: 40px;
 }
-
 .button-container {
   text-align: center;
 }
-
 .create-map-button {
   width: 100%;
   padding: 15px;
@@ -182,7 +173,6 @@ export default {
   cursor: pointer;
   font-size: 16px;
 }
-
 .create-map-button:hover {
   background-color: #333;
 }

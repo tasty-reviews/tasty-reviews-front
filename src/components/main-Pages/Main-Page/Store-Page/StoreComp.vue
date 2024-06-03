@@ -168,6 +168,7 @@ export default {
   color: gray;
 }
 .fl-right {
+  font-size: 14px;
   margin-left: auto;
 }
 .second-line {
