@@ -8,7 +8,7 @@
         <!-- 카테고리 -->
         <p class="category">{{ store.category }}</p>
         <!-- 별점 -->
-        <p class="fl-right">⭐️ {{ store.rating }}</p>
+        <p class="fl-right">⭐️ {{ store.avgRating }}</p>
       </div>
       <div class="second-line">
         <!-- 주소 -->
