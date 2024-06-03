@@ -1,56 +1,31 @@
 <template>
-    <div class="add-map">
+  <div class="add-map">
+    <div class="header">
+      <h3 class="map-title">지도 추가</h3>
+    </div>
 
-      <div class="header">
-        <h3 class="map-title">지도 추가</h3>
-      </div>
+    <div class="border-line"></div>
+    <div class="thumbnail"> 썸네일
+      <label for="thumbnail-upload" class="thumbnail-label">
+        <div class="thumbnail-placeholder">
+          <span v-if="!thumbnail" class="add-image-text">
+            <img src="@/assets/plus.png" alt="이미지 아이콘" class="image-icon" /> 이미지 추가하기
+          </span>
+          <img v-else :src="thumbnail" alt="썸네일 이미지" />
+        </div>
+        <input ref="thumbnailUpload" type="file" id="thumbnail-upload" @change="onFileChange" style="display: none" />
+      </label>
+    </div>
 
-      <div class="border-line"></div>
-      <div class="thumbnail"> 썸네일
+    <div class="form-group">
+      <label for="title">지도 제목</label>
+      <input type="text" id="title" v-model="title" placeholder="지도 제목을 입력해주세요." />
+    </div>
 
-        <label for="thumbnail-upload" class="thumbnail-label">
-
-          <div class="thumbnail-placeholder">
-            <span v-if="!thumbnail" class="add-image-text">
-              <img
-                src="@/assets/plus.png"
-                alt="이미지 아이콘"
-                class="image-icon"
-              /> 이미지 추가하기
-            </span>
-            <img v-else :src="thumbnail" alt="썸네일 이미지" />
-          </div>
-
-          <input
-            type="file"
-            id="thumbnail-upload"
-            @change="onFileChange"
-            style="display: none"
-          />
-
-        </label>
-
-      </div>
-  
-      <div class="form-group">
-        <label for="title">지도 제목</label>
-        <input
-          type="text"
-          id="title"
-          v-model="title"
-          placeholder="지도 제목을 입력해주세요."
-        />
-      </div>
-  
-      <div class="form-group">
-        <label for="description">상세 설명 (20자 이상)</label>
-        <textarea
-          id="description"
-          v-model="description"
-          placeholder="지도에 대한 상세설명을 작성해주세요."
-          rows="6"
-        ></textarea>
-      </div>
+    <div class="form-group">
+      <label for="description">상세 설명 (20자 이상)</label>
+      <textarea id="description" v-model="description" placeholder="지도에 대한 상세설명을 작성해주세요." rows="6"></textarea>
+    </div>
 
       <div class="form-group button-container">
         <button class="create-map-button" @click="createMap">
@@ -144,51 +119,42 @@
   border-bottom: 1px solid #ddd; 
   margin-bottom: 40px;
 }
-  
-  .image-icon {
-    width: 15px;
-    height: auto;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 8px;
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    width: 100%;
-    height: 220px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  .form-group input {
-    height: 40px;
-  }
-  .button-container {
-    text-align: center;
-  }
-  
-  .create-map-button {
-    width: 100%;
-    padding: 15px;
-    background-color: #000;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .create-map-button:hover {
-    background-color: #333;
-  }
-  </style>
-  
+.image-icon {
+  width: 15px;
+  height: auto;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.form-group input {
+  height: 40px;
+}
+.button-container {
+  text-align: center;
+}
+.create-map-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.create-map-button:hover {
+  background-color: #333;
+}
+</style>
