@@ -2,7 +2,7 @@
 
   <div class="rankings-page">
     <h1>맛집 랭킹</h1>
-    <select v-model="selectedType" @change="fetchRankings">
+    <select class="size" v-model="selectedType" @change="fetchRankings">
       <option value="VIEW_COUNT">조회수 순</option>
       <option value="REVIEW_COUNT">리뷰 순</option>
     </select>
@@ -78,8 +78,12 @@ export default {
   </script>
  
 <style scoped>
+.size{
+  font-size: 20px;
+}
 .rankings-page {
   padding: 10px;
+  font-family: 'Arial', sans-serif;
 }
 
 .rankings-page h1 {
