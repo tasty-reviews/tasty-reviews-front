@@ -20,6 +20,7 @@
     <div class="divider"></div>
     <h2 class="section-title">나의 리뷰 목록</h2>
     <div class="divider"></div>
+    
     <!-- 나의 리뷰 목록 -->
     <div class="review-list-container">
       <div class="review-list" v-if="reviews && reviews.length">
@@ -27,7 +28,7 @@
         <div v-for="review in reviews" :key="review.id" class="review-item">
           <div class="review-header">
             <div>
-              <div class="store-name">{{ review.restaurantName }}</div>
+              <div class="store-name">{{ review.placeName }}</div>
               <div class="rating">별점: {{ review.rating }}</div>
             </div>
             <div class="button-group">
@@ -117,6 +118,7 @@ export default {
         });
 
         if (response.status === 200) {
+          console.log('Fetched reviews:', response.data); // 서버에서 받은 데이터를 콘솔에 출력
           this.reviews = response.data;
         } else {
           console.error('Failed to fetch user reviews');
@@ -125,28 +127,27 @@ export default {
         console.error('오류 발생:', error);
       }
     },
-    deleteReview(reviewId) {
+    async deleteReview(reviewId) {
       try {
         const access = document.cookie
           .split('; ')
           .find(row => row.startsWith('access='))
           .split('=')[1];
-      axios.delete(`http://localhost:8080/api/reviews/${reviewId}`, {
+        const response = await axios.delete(`http://localhost:8080/api/reviews/${reviewId}`, {
           headers: {
             'Content-Type': 'application/json',
             'access': `${access}` // JWT 토큰을 포함
           },
           withCredentials: true // CORS 문제 해결을 위해 withCredentials 설정 추가
-        })
-        .then(response => {
-          if (response.status === 204) {
-            // 삭제 요청이 성공하면 리뷰 목록에서 해당 리뷰를 제거합니다.
-            this.reviews = this.reviews.filter(r => r.id !== reviewId);
-            console.log('리뷰가 삭제되었습니다.');
-          } else {
-            console.error('Failed to delete review');
-          }
-        })
+        });
+
+        if (response.status === 204) {
+          // 삭제 요청이 성공하면 리뷰 목록에서 해당 리뷰를 제거합니다.
+          this.reviews = this.reviews.filter(r => r.id !== reviewId);
+          console.log('리뷰가 삭제되었습니다.');
+        } else {
+          console.error('Failed to delete review');
+        }
       } catch (error) {
         console.error('오류 발생:', error);
       }

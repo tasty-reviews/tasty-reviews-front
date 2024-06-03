@@ -26,13 +26,14 @@
             </div>
             <div class="review-date">{{ review.createdDate }}</div>
           </div>
+          <p class="review-nickname">작성자: {{ review.nickname }}</p>
           <p class="review-comment">{{ review.comment }}</p>
           <img v-if="review.images && review.images.length > 0" :src="getEncodedImageUrl(review.images[0].storedFileName)" alt="리뷰 이미지" class="review-image">
+          <button @click="deleteReview(review.id)">삭제</button>
         </div>
       </div>
     </div>
     <div class="content" v-if="activeTab === 'details'">
-      <!-- 상세 정보 내용 -->
       <div class="store-detail">
         <div class="margin_bottom"><label>{{ secondCategory }}</label></div>
         <div class="name-rating">
@@ -67,7 +68,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['isLoggedIn']),// Vuex 스토어의 isLoggedIn 상태를 컴포넌트 내부에 매핑
+    ...mapState(['isLoggedIn']), // Vuex 스토어의 isLoggedIn 상태를 컴포넌트 내부에 매핑
     secondCategory() {
       if (this.store.categoryName) {
         const categories = this.store.categoryName.split(' > ');
@@ -78,22 +79,22 @@ export default {
   },
   async created() {
     const storeId = this.$route.params.id;
-    try {
-      const response = await axios.get(`http://localhost:8080/place/${storeId}`);
-      this.store = response.data;
-
-      // 이미지 URL 가져오기
-      const imageUrls = await this.getNaverImage(this.store.placeName + " 음식 사진");
-      this.store.imageUrls = imageUrls;
-      this.store.imageUrl = imageUrls.length > 0 ? imageUrls[0] : 'path/to/default/image.jpg';
-
-      // 리뷰 가져오기
-      await this.fetchReviews();
-    } catch (error) {
-      console.error('가게 정보를 가져오는 도중 오류 발생:', error);
-    }
+    await this.fetchStore(storeId);
+    await this.fetchReviews(storeId);
   },
   methods: {
+    async fetchStore(storeId) {
+      try {
+        const response = await axios.get(`http://localhost:8080/place/${storeId}`);
+        this.store = response.data;
+        
+        const imageUrls = await this.getNaverImage(this.store.placeName + " 음식 사진");
+        this.store.imageUrls = imageUrls;
+        this.store.imageUrl = imageUrls.length > 0 ? imageUrls[0] : 'path/to/default/image.jpg';
+      } catch (error) {
+        console.error('가게 정보를 가져오는 도중 오류 발생:', error);
+      }
+    },
     async getNaverImage(query) {
       try {
         const response = await axios.get('http://localhost:8080/search/image', {
@@ -101,9 +102,6 @@ export default {
             query: query
           }
         });
-        // 성공적으로 데이터를 받아온 경우 처리
-        console.log('네이버 이미지 검색 결과:', response.data);
-        // 이미지의 링크 배열 반환
         const imageUrls = [];
         for (let i = 1; i <= 4; i++) {
           if (response.data[`image${i}`]) {
@@ -112,20 +110,27 @@ export default {
         }
         return imageUrls;
       } catch (error) {
-        // 오류 발생 시 처리
         console.error('네이버 이미지 검색 도중 오류 발생:', error);
         return [];
       }
     },
-    async fetchReviews() {
+    async fetchReviews(storeId) {
       try {
-        const response = await axios.get(`http://localhost:8080/api/restaurants/${this.store.id}`);
+        const response = await axios.get(`http://localhost:8080/api/restaurants/${storeId}`);
         this.reviews = response.data;
       } catch (error) {
-        console.error('Error fetching reviews:', error);
+        console.error('리뷰 정보를 가져오는 도중 오류 발생:', error);
       }
     },
-    // 이미지 로드 실패 시 대체 이미지 로드
+    async deleteReview(reviewId) {
+      try {
+        await axios.delete(`http://localhost:8080/api/reviews/${reviewId}`);
+        await this.fetchReviews(this.store.id);
+        await this.fetchStore(this.store.id);  // 리뷰 삭제 후 가게 정보 업데이트
+      } catch (error) {
+        console.error('리뷰 삭제 도중 오류 발생:', error);
+      }
+    },
     onImageError() {
       if (this.store.imageUrls && this.store.imageUrls.length > 0) {
         const currentImageIndex = this.store.imageUrls.indexOf(this.store.imageUrl);
@@ -148,10 +153,9 @@ export default {
     setActiveTab(tab) {
       this.activeTab = tab;
       if (tab === 'reviews') {
-        this.fetchReviews();
+        this.fetchReviews(this.store.id);
       }
     },
-    // 이미지 URL 인코딩
     getEncodedImageUrl(fileName) {
       return `http://localhost:8080/api/reviews/image/${encodeURIComponent(fileName)}`;
     }
