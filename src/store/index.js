@@ -17,12 +17,15 @@ const store = createStore({
     },
     setSelectedSubRegion(state, subRegion) {
       state.selectedSubRegion = subRegion;
+      state.enteredSearchWord = null;
     },
     setSearchWord(state, searchWord) {
       state.enteredSearchWord = searchWord;
     },
     setCurrentLocation(state, location) {
       state.currentLocation = location;
+      state.enteredSearchWord = null;
+      state.selectedSubRegion = null;
     },
     setStores(state, stores) {
       state.stores = stores;
