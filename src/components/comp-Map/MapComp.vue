@@ -12,7 +12,8 @@ export default {
       map: null,
       marker: null,
       storeMarkers: [],
-      isInitialLoad: true
+      isInitialLoad: true,
+      infowindow: null // 현재 열려 있는 인포윈도우를 저장
     };
   },
   computed: {
@@ -28,7 +29,6 @@ export default {
           this.map.setCenter(newPos);
           this.getAddressFromCoords(newPos);
         }
-        
       } else {
         this.isInitialLoad = false; // 첫 번째 변경 후 플래그를 false로 설정
       }
@@ -58,6 +58,13 @@ export default {
             this.createMarker(new window.kakao.maps.LatLng(lat, lng));
             window.kakao.maps.event.addListener(this.map, 'dragend', this.handleMapMove);
             this.getAddressFromCoords(this.map.getCenter());
+
+            // 지도 클릭 이벤트 추가
+            window.kakao.maps.event.addListener(this.map, 'click', () => {
+              if (this.infowindow) {
+                this.infowindow.close();
+              }
+            });
           },
           (error) => {
             console.error("Geolocation error:", error);
@@ -81,6 +88,13 @@ export default {
       window.kakao.maps.event.addListener(this.map, 'dragend', this.handleMapMove);
       this.getAddressFromCoords(this.map.getCenter());
       this.goToCurrentLocation();
+
+      // 지도 클릭 이벤트 추가
+      window.kakao.maps.event.addListener(this.map, 'click', () => {
+        if (this.infowindow) {
+          this.infowindow.close();
+        }
+      });
     },
     handleMapMove() {
       this.getAddressFromCoords(this.map.getCenter());
@@ -145,6 +159,29 @@ export default {
           map: this.map,
           position: position
         });
+        const infowindowContent = document.createElement('div');
+        infowindowContent.innerHTML = `
+          <div style="font-family: 'Arial', sans-serif; font-size:13px; padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+            <p>${store.place_name}</p>
+            <p class="infowindow-link">상세보기</p>
+          </div>
+        `;
+        infowindowContent.querySelector('.infowindow-link').addEventListener('click', () => {
+          this.goToDetail(store.id);
+        });
+        const infowindow = new window.kakao.maps.InfoWindow({
+          content: infowindowContent,
+          removable: true
+        });
+
+        window.kakao.maps.event.addListener(marker, 'click', () => {
+          if (this.infowindow) {
+            this.infowindow.close();
+          }
+          this.infowindow = infowindow;
+          infowindow.open(this.map, marker);
+        });
+
         this.storeMarkers.push(marker);
       });
     },
@@ -158,6 +195,9 @@ export default {
           console.error('Failed to get address:', status);
         }
       });
+    },
+    goToDetail(storeId) {
+      this.$router.push(`/store/${storeId}`);
     }
   }
 };
@@ -169,5 +209,28 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 100;
+}
+
+.infowindow {
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.infowindow p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.infowindow-link {
+  color: blue;
+  text-decoration: none;
+}
+
+.infowindow-link:hover {
+  text-decoration: underline;
 }
 </style>
